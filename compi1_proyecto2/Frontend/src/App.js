@@ -40,7 +40,7 @@ function TextAreaWithButton() {
 
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Escribe o carga tu texto aquí..."
+        placeholder="Escribe o carga tu texto aquí por favor..."
       />
       <textarea
         className="textarea"
