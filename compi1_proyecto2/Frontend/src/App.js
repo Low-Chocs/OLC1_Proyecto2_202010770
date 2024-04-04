@@ -1,6 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { useState } from 'react';
+let resultado = "";
+
+
 function App() {
   return (
     <div className="App">
@@ -15,6 +18,7 @@ function App() {
 }
 
 function TextAreaWithButton() {
+  
   const [text, setText] = useState('');
   const [otherText, setOtherText] = useState('');
 
@@ -30,7 +34,8 @@ function TextAreaWithButton() {
   };
 
   const handlePrintText = () => {
-    console.log(text);
+    resultado = parser.parse(text);
+    console.log(resultado);
   };
 
   return (
