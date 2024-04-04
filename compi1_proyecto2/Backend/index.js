@@ -1,1 +1,8 @@
-console.log("HOLA MUNDO");
+const parser = require("./Parser/parser.js");
+
+
+let entrada = `println("Hola mundo");`;
+
+let resultado = parser.parse(entrada);
+
+console.log(resultado);
