@@ -97,31 +97,33 @@ caracter \'{char}\'
 //%left 'MAS' 'MENOS'
 
 // -------> Simbolo Inicial
-%start inicio
+%start INICIO
 
 
 %% // ------> Gramatica
 
-inicio
-	: listainstr EOF 
-;
+INICIO :
+    INSTRUCCIONES EOF |
+    EOF ;
 
-listainstr 
-    : listainstr instruccion
-    | instruccion
-;
+INSTRUCCIONES :
+    INSTRUCCIONES INSTRUCCION |
+    INSTRUCCION ;
 
-instruccion
-	: print     
-	| error PYC 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
-;
+INSTRUCCION :
+    PRINT |
+    error {console.error({tipo: 'SINTACTICO', inesperado: yytext ,  linea: this._$.first_line , columna: this._$.first_column});} ;
+
+PRINT :
+    R_cout '<<' EXPRESION '<<' R_endl ';' |
+    R_cout '<<' EXPRESION ';' ;
 
 
-print 
-    : RPRINT PARIZQ expresion PARDER PYC    { console.log($3); }
-;
-
-expresion 
-    : ENTERO    { $$ = $1; }
-    | CADENA    { console.log("HOLA");$$ = $1; }
-;
+EXPRESION :
+    T_id     |
+    T_int    |
+    T_double |
+    T_string |
+    T_char   |
+    R_true   |
+    R_false  ;

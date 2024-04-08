@@ -72,33 +72,24 @@
   }
 */
 var parser = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[2,5,9];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,7],$V2=[2,5,8],$V3=[9,12];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"inicio":3,"listainstr":4,"EOF":5,"instruccion":6,"print":7,"PYC":8,"RPRINT":9,"PARIZQ":10,"expresion":11,"PARDER":12,"ENTERO":13,"CADENA":14,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",8:"PYC",9:"RPRINT",10:"PARIZQ",12:"PARDER",13:"ENTERO",14:"CADENA"},
-productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,2],[7,5],[11,1],[11,1]],
+symbols_: {"error":2,"INICIO":3,"INSTRUCCIONES":4,"EOF":5,"INSTRUCCION":6,"PRINT":7,"R_cout":8,"<<":9,"EXPRESION":10,"R_endl":11,";":12,"T_id":13,"T_int":14,"T_double":15,"T_string":16,"T_char":17,"R_true":18,"R_false":19,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"R_cout",9:"<<",11:"R_endl",12:";",13:"T_id",14:"T_int",15:"T_double",16:"T_string",17:"T_char",18:"R_true",19:"R_false"},
+productions_: [0,[3,2],[3,1],[4,2],[4,1],[6,1],[6,1],[7,6],[7,4],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
-case 5:
-console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);
-break;
 case 6:
- console.log($$[$0-2]); 
-break;
-case 7:
- this.$ = $$[$0]; 
-break;
-case 8:
- console.log("HOLA");this.$ = $$[$0]; 
+console.error({tipo: 'SINTACTICO', inesperado: yytext ,  linea: this._$.first_line , columna: this._$.first_column});
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,6:3,7:4,9:$V1},{1:[3]},{2:$V0,5:[1,7],6:8,7:4,9:$V1},o($V2,[2,3]),o($V2,[2,4]),{8:[1,9]},{10:[1,10]},{1:[2,1]},o($V2,[2,2]),o($V2,[2,5]),{11:11,13:[1,12],14:[1,13]},{12:[1,14]},{12:[2,7]},{12:[2,8]},{8:[1,15]},o($V2,[2,6])],
-defaultActions: {7:[2,1],12:[2,7],13:[2,8]},
+table: [{2:$V0,3:1,4:2,5:[1,3],6:4,7:5,8:$V1},{1:[3]},{2:$V0,5:[1,8],6:9,7:5,8:$V1},{1:[2,2]},o($V2,[2,4]),o($V2,[2,5]),o($V2,[2,6]),{9:[1,10]},{1:[2,1]},o($V2,[2,3]),{10:11,13:[1,12],14:[1,13],15:[1,14],16:[1,15],17:[1,16],18:[1,17],19:[1,18]},{9:[1,19],12:[1,20]},o($V3,[2,9]),o($V3,[2,10]),o($V3,[2,11]),o($V3,[2,12]),o($V3,[2,13]),o($V3,[2,14]),o($V3,[2,15]),{11:[1,21]},o($V2,[2,8]),{12:[1,22]},o($V2,[2,7])],
+defaultActions: {3:[2,2],8:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -674,28 +665,152 @@ options: {"case-insensitive":true},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:return "RPRINT";
+case 0:return 'R_int'
 break;
-case 1:return "PARIZQ"; 
+case 1:return 'R_double'
 break;
-case 2:return  "PARDER"; 
+case 2:return 'R_bool'
 break;
-case 3:return  "PYC"; 
+case 3:return 'R_char'
 break;
-case 4: return 13; 
+case 4:return 'R_string'
 break;
-case 5: console.log("HOLA"); return 14;
+case 5:return 18
 break;
-case 6:/* Espacios se ignoran */
+case 6:return 19
 break;
-case 7:return 5;
+case 7:return 'R_pow'
 break;
-case 8: console.error('Error léxico: \"' + yy_.yytext + '\", linea: ' + yy_.yylloc.first_line + ', columna: ' + yy_.yylloc.first_column);  
+case 8:return 'R_new'
+break;
+case 9:return 'R_if'
+break;
+case 10:return 'R_else'
+break;
+case 11:return 'R_switch'
+break;
+case 12:return 'R_case'
+break;
+case 13:return 'R_default'
+break;
+case 14:return 'R_while'
+break;
+case 15:return 'R_for'
+break;
+case 16:return 'R_do'
+break;
+case 17:return 'R_break'
+break;
+case 18:return 'R_continue'
+break;
+case 19:return 'R_return'
+break;
+case 20:return 'R_void'
+break;
+case 21:return 8
+break;
+case 22:return 11
+break;
+case 23:return 'R_toLower'
+break;
+case 24:return 'R_toUpper'
+break;
+case 25:return 'R_round'
+break;
+case 26:return 'R_length'
+break;
+case 27:return 'R_typeOf'
+break;
+case 28:return 'R_toString'
+break;
+case 29:return 'R_c_str'
+break;
+case 30:return 'R_execute'
+break;
+case 31:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng - 2);return 16
+break;
+case 32:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng - 2);return 17
+break;
+case 33:return 13
+break;
+case 34:return 15
+break;
+case 35:return 14
+break;
+case 36:return '++'
+break;
+case 37:return '--'
+break;
+case 38:return '+'
+break;
+case 39:return '-'
+break;
+case 40:return '*'
+break;
+case 41:return '/'
+break;
+case 42:return '%'
+break;
+case 43:return '('
+break;
+case 44:return ')'
+break;
+case 45:return '['
+break;
+case 46:return ']'
+break;
+case 47:return '{'
+break;
+case 48:return '}'
+break;
+case 49:return '=='
+break;
+case 50:return '='
+break;
+case 51:return '.'
+break;
+case 52:return ','
+break;
+case 53:return ':'
+break;
+case 54:return 12
+break;
+case 55:return '||'
+break;
+case 56:return '&&'
+break;
+case 57:return '!='
+break;
+case 58:return '!'
+break;
+case 59:return 9
+break;
+case 60:return '<='
+break;
+case 61:return '>='
+break;
+case 62:return '<'
+break;
+case 63:return '>'
+break;
+case 64:return '?'
+break;
+case 65:
+break;
+case 66:
+break;
+case 67:
+break;
+case 68:
+break;
+case 69:console.log({tipo: 'LEXICO', inesperado: yy_.yytext, linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column})
+break;
+case 70:return 5
 break;
 }
 },
-rules: [/^(?:println\b)/i,/^(?:\()/i,/^(?:\))/i,/^(?:;)/i,/^(?:([0-9]+))/i,/^(?:([\"][^\n\"]*[\"]))/i,/^(?:[ \s\r\n\t])/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8],"inclusive":true}}
+rules: [/^(?:int\b)/i,/^(?:double\b)/i,/^(?:bool\b)/i,/^(?:char\b)/i,/^(?:std::string\b)/i,/^(?:true\b)/i,/^(?:false\b)/i,/^(?:pow\b)/i,/^(?:new\b)/i,/^(?:if\b)/i,/^(?:else\b)/i,/^(?:switch\b)/i,/^(?:case\b)/i,/^(?:default\b)/i,/^(?:while\b)/i,/^(?:for\b)/i,/^(?:do\b)/i,/^(?:break\b)/i,/^(?:continue\b)/i,/^(?:return\b)/i,/^(?:void\b)/i,/^(?:cout\b)/i,/^(?:endl\b)/i,/^(?:toLower\b)/i,/^(?:toUpper\b)/i,/^(?:round\b)/i,/^(?:length\b)/i,/^(?:typeOf\b)/i,/^(?:toString\b)/i,/^(?:c_str\b)/i,/^(?:execute\b)/i,/^(?:("(([^\n\"\\]|\\.))*"))/i,/^(?:('(([^\n\"\\]|\\.))'))/i,/^(?:([a-zA-Z_][a-zA-Z0-9_]*))/i,/^(?:([\-]?[0-9]+\.[0-9]+\b))/i,/^(?:([\-]?[0-9]+\b))/i,/^(?:\+\+)/i,/^(?:--)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:%)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\{)/i,/^(?:\})/i,/^(?:==)/i,/^(?:=)/i,/^(?:\.)/i,/^(?:,)/i,/^(?::)/i,/^(?:;)/i,/^(?:\|\|)/i,/^(?:&&)/i,/^(?:!=)/i,/^(?:!)/i,/^(?:<<)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\?)/i,/^(?:\s+)/i,/^(?:[ \n\r])/i,/^(?:\/\/.*)/i,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/i,/^(?:.)/i,/^(?:$)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70],"inclusive":true}}
 });
 return lexer;
 })();
