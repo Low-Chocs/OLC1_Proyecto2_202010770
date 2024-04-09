@@ -72,24 +72,24 @@
   }
 */
 var parser = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,7],$V2=[2,5,8],$V3=[9,12];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,9],$V1=[1,7],$V2=[1,8],$V3=[1,10],$V4=[2,5,10,11,22],$V5=[24,26],$V6=[1,22],$V7=[1,23],$V8=[1,24],$V9=[1,25],$Va=[1,26],$Vb=[1,27],$Vc=[1,28],$Vd=[8,31],$Ve=[1,36],$Vf=[26,31];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"INSTRUCCIONES":4,"EOF":5,"INSTRUCCION":6,"PRINT":7,"R_cout":8,"<<":9,"EXPRESION":10,"R_endl":11,";":12,"T_id":13,"T_int":14,"T_double":15,"T_string":16,"T_char":17,"R_true":18,"R_false":19,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",8:"R_cout",9:"<<",11:"R_endl",12:";",13:"T_id",14:"T_int",15:"T_double",16:"T_string",17:"T_char",18:"R_true",19:"R_false"},
-productions_: [0,[3,2],[3,1],[4,2],[4,1],[6,1],[6,1],[7,6],[7,4],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1]],
+symbols_: {"error":2,"INICIO":3,"INSTRUCCIONESGLOBALES":4,"EOF":5,"INSTRUCCIONGLOBAL":6,"DECLARACION":7,";":8,"VECTOR":9,"FUNCION":10,"LLAMADAEXECUTE":11,"INSTRUCCIONES":12,"INSTRUCCION":13,"INCDEC":14,"ASIGNACION":15,"IF":16,"SWITCH":17,"BUCLES":18,"TRANSFERENCIA":19,"PRINT":20,"LLAMADAFUNCION":21,"TIPO":22,"IDENTIFICADORES":23,"=":24,"EXPRESION":25,",":26,"T_id":27,"++":28,"--":29,"[":30,"]":31,"R_new":32,"VECTORES":33,"VALOR":34,"VALORES":35,"EXPRESIONES":36,"R_cout":37,"<<":38,"R_endl":39,"T_int":40,"T_double":41,"T_string":42,"T_char":43,"R_true":44,"R_false":45,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:";",10:"FUNCION",11:"LLAMADAEXECUTE",16:"IF",17:"SWITCH",18:"BUCLES",19:"TRANSFERENCIA",21:"LLAMADAFUNCION",22:"TIPO",24:"=",26:",",27:"T_id",28:"++",29:"--",30:"[",31:"]",32:"R_new",36:"EXPRESIONES",37:"R_cout",38:"<<",39:"R_endl",40:"T_int",41:"T_double",42:"T_string",43:"T_char",44:"R_true",45:"R_false"},
+productions_: [0,[3,2],[3,1],[4,2],[4,1],[6,2],[6,2],[6,1],[6,2],[6,1],[12,2],[12,1],[13,2],[13,2],[13,2],[13,2],[13,1],[13,1],[13,1],[13,2],[13,2],[13,2],[13,1],[7,4],[23,3],[23,1],[14,2],[14,2],[9,15],[9,10],[9,8],[9,6],[33,3],[35,3],[35,1],[34,3],[15,9],[15,6],[15,3],[20,6],[20,4],[25,1],[25,1],[25,1],[25,1],[25,1],[25,1],[25,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
-case 6:
+case 9: case 22:
 console.error({tipo: 'SINTACTICO', inesperado: yytext ,  linea: this._$.first_line , columna: this._$.first_column});
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,5:[1,3],6:4,7:5,8:$V1},{1:[3]},{2:$V0,5:[1,8],6:9,7:5,8:$V1},{1:[2,2]},o($V2,[2,4]),o($V2,[2,5]),o($V2,[2,6]),{9:[1,10]},{1:[2,1]},o($V2,[2,3]),{10:11,13:[1,12],14:[1,13],15:[1,14],16:[1,15],17:[1,16],18:[1,17],19:[1,18]},{9:[1,19],12:[1,20]},o($V3,[2,9]),o($V3,[2,10]),o($V3,[2,11]),o($V3,[2,12]),o($V3,[2,13]),o($V3,[2,14]),o($V3,[2,15]),{11:[1,21]},o($V2,[2,8]),{12:[1,22]},o($V2,[2,7])],
-defaultActions: {3:[2,2],8:[2,1]},
+table: [{2:$V0,3:1,4:2,5:[1,3],6:4,7:5,9:6,10:$V1,11:$V2,22:$V3},{1:[3]},{2:$V0,5:[1,11],6:12,7:5,9:6,10:$V1,11:$V2,22:$V3},{1:[2,2]},o($V4,[2,4]),{8:[1,13]},{8:[1,14]},o($V4,[2,7]),{8:[1,15]},o($V4,[2,9]),{23:16,27:[1,17]},{1:[2,1]},o($V4,[2,3]),o($V4,[2,5]),o($V4,[2,6]),o($V4,[2,8]),{24:[1,18],26:[1,19]},o($V5,[2,25],{30:[1,20]}),{25:21,27:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc},{27:[1,29]},{31:[1,30]},{8:[2,23]},o($Vd,[2,41]),o($Vd,[2,42]),o($Vd,[2,43]),o($Vd,[2,44]),o($Vd,[2,45]),o($Vd,[2,46]),o($Vd,[2,47]),o($V5,[2,24]),{24:[1,32],30:[1,31]},{31:[1,33]},{30:$Ve,32:[1,34],34:35},{24:[1,37]},{22:[1,38]},{8:[2,31]},{36:[1,39]},{30:[1,42],32:[1,40],33:41},{30:[1,43]},{31:[1,44]},{22:[1,45]},{8:[2,30]},{30:$Ve,34:47,35:46},{25:48,27:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc},o([8,26,31],[2,35]),{30:[1,49]},{26:[1,51],31:[1,50]},o($Vf,[2,34]),{31:[1,52]},{25:53,27:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc},{8:[2,32]},{30:$Ve,34:54},{8:[2,29]},{31:[1,55]},o($Vf,[2,33]),{30:[1,56]},{25:57,27:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc},{31:[1,58]},{8:[2,28]}],
+defaultActions: {3:[2,2],11:[2,1],21:[2,23],35:[2,31],41:[2,30],50:[2,32],52:[2,29],58:[2,28]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -675,13 +675,13 @@ case 3:return 'R_char'
 break;
 case 4:return 'R_string'
 break;
-case 5:return 18
+case 5:return 44
 break;
-case 6:return 19
+case 6:return 45
 break;
 case 7:return 'R_pow'
 break;
-case 8:return 'R_new'
+case 8:return 32
 break;
 case 9:return 'R_if'
 break;
@@ -707,9 +707,9 @@ case 19:return 'R_return'
 break;
 case 20:return 'R_void'
 break;
-case 21:return 8
+case 21:return 37
 break;
-case 22:return 11
+case 22:return 39
 break;
 case 23:return 'R_toLower'
 break;
@@ -727,19 +727,19 @@ case 29:return 'R_c_str'
 break;
 case 30:return 'R_execute'
 break;
-case 31:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng - 2);return 16
+case 31:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng - 2);return 42
 break;
-case 32:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng - 2);return 17
+case 32:yy_.yytext = yy_.yytext.substr(1,yy_.yyleng - 2);return 43
 break;
-case 33:return 13
+case 33:return 27
 break;
-case 34:return 15
+case 34:return 41
 break;
-case 35:return 14
+case 35:return 40
 break;
-case 36:return '++'
+case 36:return 28
 break;
-case 37:return '--'
+case 37:return 29
 break;
 case 38:return '+'
 break;
@@ -755,9 +755,9 @@ case 43:return '('
 break;
 case 44:return ')'
 break;
-case 45:return '['
+case 45:return 30
 break;
-case 46:return ']'
+case 46:return 31
 break;
 case 47:return '{'
 break;
@@ -765,15 +765,15 @@ case 48:return '}'
 break;
 case 49:return '=='
 break;
-case 50:return '='
+case 50:return 24
 break;
 case 51:return '.'
 break;
-case 52:return ','
+case 52:return 26
 break;
 case 53:return ':'
 break;
-case 54:return 12
+case 54:return 8
 break;
 case 55:return '||'
 break;
@@ -783,7 +783,7 @@ case 57:return '!='
 break;
 case 58:return '!'
 break;
-case 59:return 9
+case 59:return 38
 break;
 case 60:return '<='
 break;

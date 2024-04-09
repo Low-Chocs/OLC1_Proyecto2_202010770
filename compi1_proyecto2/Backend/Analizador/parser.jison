@@ -95,6 +95,17 @@ caracter \'{char}\'
 // -------> Precedencia
 
 //%left 'MAS' 'MENOS'
+%left '?' ':'
+%left '||'
+%left '&&'
+%right '!'
+%left '==' '!='
+%left '<' '<=' '>' '>='
+%left '+' '-'
+%left '*' '/' '%'
+%nonassoc R_pow
+%right T_uminus
+%left '.' '[' ']' '(' ')'
 
 // -------> Simbolo Inicial
 %start INICIO
@@ -103,16 +114,72 @@ caracter \'{char}\'
 %% // ------> Gramatica
 
 INICIO :
-    INSTRUCCIONES EOF |
-    EOF ;
+    INSTRUCCIONESGLOBALES EOF |
+    EOF                       ;
+
+
+INSTRUCCIONESGLOBALES :
+    INSTRUCCIONESGLOBALES INSTRUCCIONGLOBAL |
+    INSTRUCCIONGLOBAL                       ;
+
+INSTRUCCIONGLOBAL :
+    DECLARACION    ';' |
+    VECTOR         ';' |
+    FUNCION            |
+    LLAMADAEXECUTE ';' |
+    error {console.error({tipo: 'SINTACTICO', inesperado: yytext ,  linea: this._$.first_line , columna: this._$.first_column});} ;
+
 
 INSTRUCCIONES :
     INSTRUCCIONES INSTRUCCION |
-    INSTRUCCION ;
+    INSTRUCCION               ;
+
 
 INSTRUCCION :
-    PRINT |
+    DECLARACION    ';' |
+    INCDEC         ';' |
+    VECTOR         ';' |
+    ASIGNACION     ';' |
+    IF                 |
+    SWITCH             |
+    BUCLES             |
+    TRANSFERENCIA  ';' |
+    PRINT          ';' |
+    LLAMADAFUNCION ';' |
     error {console.error({tipo: 'SINTACTICO', inesperado: yytext ,  linea: this._$.first_line , columna: this._$.first_column});} ;
+
+DECLARACION :
+    TIPO IDENTIFICADORES '=' EXPRESION ;
+
+IDENTIFICADORES :
+    IDENTIFICADORES ',' T_id |
+    T_id                     ;
+
+INCDEC :
+    T_id '++' |
+    T_id '--' ;
+
+VECTOR :
+    TIPO T_id '[' ']' '[' ']' '=' R_new TIPO '[' EXPRESION ']' '[' EXPRESION ']' |
+    TIPO T_id '[' ']' '=' R_new TIPO '[' EXPRESION ']'                           |
+    TIPO T_id '[' ']' '[' ']' '=' VECTORES                                       |
+    TIPO T_id '[' ']' '=' VALOR                                                  ;
+
+
+VECTORES :
+    '[' VALORES ']' ;
+
+VALORES :
+    VALORES ',' VALOR |
+    VALOR             ;
+
+VALOR :
+    '[' EXPRESIONES ']' ;
+
+ASIGNACION :
+    T_id '[' EXPRESION ']' '[' EXPRESION ']' '=' EXPRESION |
+    T_id '[' EXPRESION ']' '=' EXPRESION                   |
+    T_id '=' EXPRESION                                     ;
 
 PRINT :
     R_cout '<<' EXPRESION '<<' R_endl ';' |
