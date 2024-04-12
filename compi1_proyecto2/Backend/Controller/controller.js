@@ -1,19 +1,15 @@
-const analizador = require("../parser.js");
+const analizador = require("../Analizador/Parser.js");
 
-// Función principal, verifica que funcione la api
-const index = (req, res) => {
-    res.status(200).json({message: "Estoy funcionando!"}) // respuesta
+class Controller {
+    running = (_, res) => {
+        res.send('Interpreter is running!!!')
+    }
+
+    parser = (req, res) => {
+        const entrada = req.body.entrada;
+        let resultado = analizador.parse(entrada);
+        res.json({message: "Funcion analizar", salida: resultado})
+    }
 }
 
-// Funcion analizar, permite utilizar el analizador
-const analizar = (req, res) => {
-    const {entrada} = req.body; // obtener informacion del body
-    let resultado = analizador.parse(entrada); // analizamos la entrada
-    res.status(200).json({message: "Funcion analizar", salida: resultado}) //respuesta
-}
-
-
-module.exports = {
-    index,
-    analizar
-}
+module.exports = Controller

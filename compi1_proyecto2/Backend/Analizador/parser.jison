@@ -1,17 +1,17 @@
-// ################### ANALIZADOR LEXICO #######################
+// ANALIZADOR LEXICO
 %lex
 %options case-insensitive 
 
-// ---------> Expresiones Regulares
 id       [a-zA-Z_][a-zA-Z0-9_]*
 char     ([^\n\"\\]|\\.)
-entero   [\-]?[0-9]+\b
-decimal  [\-]?[0-9]+\.[0-9]+\b
+entero   [0-9]+\b
+decimal  [0-9]+\.[0-9]+\b
 cadena   \"{char}*\"
 caracter \'{char}\'
 
 %%
-// -----> Reglas Lexicas
+
+// RESERVADAS
 'int'                                   {return 'R_int'}
 'double'                                {return 'R_double'}
 'bool'                                  {return 'R_bool'}
@@ -40,16 +40,15 @@ caracter \'{char}\'
 'round'                                 {return 'R_round'}
 'length'                                {return 'R_length'}
 'typeOf'                                {return 'R_typeOf'}
-'toString'                              {return 'R_toString'}
+'std::toString'                         {return 'R_toString'}
 'c_str'                                 {return 'R_c_str'}
 'execute'                               {return 'R_execute'}
-
-{cadena}                                {yytext = yytext.substr(1,yyleng - 2);return 'T_string'}
-{caracter}                              {yytext = yytext.substr(1,yyleng - 2);return 'T_char'}
+// DEMÁS TOKENS
+{cadena}                                {yytext = yytext.substr(1, yyleng - 2); return 'T_string'}
+{caracter}                              {yytext = yytext.substr(1, yyleng - 2); return 'T_char'}
 {id}                                    {return 'T_id'}
 {decimal}                               {return 'T_double'}
 {entero}                                {return 'T_int'}
-
 // SÍMBOLOS
 "++"                                    {return '++'}
 "--"                                    {return '--'}
@@ -84,17 +83,12 @@ caracter \'{char}\'
 [ \n\r]                                 {}
 \/\/.*                                  {} // comentario simple
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]     {} // comentario multilínea
-// -----> FIN DE CADENA Y ERRORES
 .                                       {console.log({tipo: 'LEXICO', inesperado: yytext, linea: yylloc.first_line, columna: yylloc.first_column})}
 <<EOF>>                                 {return 'EOF'}
 
-
 /lex
 
-// ################## ANALIZADOR SINTACTICO ######################
-// -------> Precedencia
-
-//%left 'MAS' 'MENOS'
+// ANALIZADOR SINTACTICO
 %left '?' ':'
 %left '||'
 %left '&&'
@@ -107,13 +101,11 @@ caracter \'{char}\'
 %right T_uminus
 %left '.' '[' ']' '(' ')'
 
-
-
-// -------> Simbolo Inicial
 %start INICIO
 
+%%
 
-%% // ------> Gramatica
+// GRAMÁTICA
 
 INICIO :
     INSTRUCCIONESGLOBALES EOF |
