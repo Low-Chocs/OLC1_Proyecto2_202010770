@@ -107,6 +107,8 @@ caracter \'{char}\'
 %right T_uminus
 %left '.' '[' ']' '(' ')'
 
+
+
 // -------> Simbolo Inicial
 %start INICIO
 
@@ -116,7 +118,6 @@ caracter \'{char}\'
 INICIO :
     INSTRUCCIONESGLOBALES EOF |
     EOF                       ;
-
 
 INSTRUCCIONESGLOBALES :
     INSTRUCCIONESGLOBALES INSTRUCCIONGLOBAL |
@@ -129,11 +130,9 @@ INSTRUCCIONGLOBAL :
     LLAMADAEXECUTE ';' |
     error {console.error({tipo: 'SINTACTICO', inesperado: yytext ,  linea: this._$.first_line , columna: this._$.first_column});} ;
 
-
 INSTRUCCIONES :
     INSTRUCCIONES INSTRUCCION |
     INSTRUCCION               ;
-
 
 INSTRUCCION :
     DECLARACION    ';' |
@@ -165,7 +164,6 @@ VECTOR :
     TIPO T_id '[' ']' '[' ']' '=' VECTORES                                       |
     TIPO T_id '[' ']' '=' VALOR                                                  ;
 
-
 VECTORES :
     '[' VALORES ']' ;
 
@@ -181,16 +179,147 @@ ASIGNACION :
     T_id '[' EXPRESION ']' '=' EXPRESION                   |
     T_id '=' EXPRESION                                     ;
 
-PRINT :
-    R_cout '<<' EXPRESION '<<' R_endl ';' |
-    R_cout '<<' EXPRESION ';' ;
+IF:
+    R_if '(' EXPRESION ')' BLOQUE               |
+    R_if '(' EXPRESION ')' BLOQUE R_else BLOQUE |
+    R_if '(' EXPRESION ')' BLOQUE R_else IF     ;
 
+SWITCH:
+    R_switch '(' EXPRESION ')' '{' CASEBLOCK '}' ;
+
+CASEBLOCK:
+    CASELIST DEFAULT |
+    CASELIST         |
+    DEFAULT          ;
+
+CASELIST:
+    CASELIST CASE |
+    CASE          ;
+
+CASE:
+    R_case EXPRESION ':' INSTRUCTIONS |
+    R_case EXPRESION ':'              ;
+
+DEFAULT:
+    RW_default ':' INSTRUCTIONS |
+    RW_default ':'              ;
+
+BUCLES :
+    R_while '(' EXPRESION ')' BLOQUE          |
+    R_do BLOQUE R_while '(' EXPRESION ')' ';' |
+    R_for '(' FORARGS ')' BLOQUE              ;
+
+FORARGS :
+    INICIALIZACION ';' EXPRESION ';' ACTUALIZACION ;
+
+INICIALIZACION :
+    TIPO T_id '=' EXPRESION |
+    ASIGNACION ;
+
+ACTUALIZACION :
+    INCDEC     |
+    ASIGNACION ;
+
+TRANSFERENCIA :
+    R_break            |
+    R_continue         |
+    R_return           |
+    R_return EXPRESION ;
+
+FUNCION:
+    TIPO   T_id '(' PARAMETROS ')' BLOQUE |
+    R_void T_id '(' PARAMETROS ')' BLOQUE |
+    TIPO   T_id '(' ')' BLOQUE            |
+    R_void T_id '(' ')' BLOQUE            ;
+
+PARAMETROS:
+    PARAMETROS ',' PARAMETRO |
+    PARAMETRO                ;
+
+PARAMETRO:
+    TIPO T_id ;
+
+BLOQUE :
+    '{' INSTRUCCIONES '}' |
+    '{' '}'               ;
+
+LLAMADAFUNCION:
+    T_id '(' EXPRESIONES ')' |
+    T_id '(' ')'             ;
+
+PRINT :
+    R_cout '<<' EXPRESION '<<' R_endl |
+    R_cout '<<' EXPRESION             ;
+
+LLAMADAEXECUTE :
+    R_execute LLAMADAFUNCION ;
+
+TIPO :
+    R_int    |
+    R_double |
+    R_bool   |
+    R_string |
+    R_char   ;
+
+EXPRESIONES :
+    EXPRESIONES ',' EXPRESION |
+    EXPRESION                 ;
 
 EXPRESION :
-    T_id     |
-    T_int    |
-    T_double |
-    T_string |
-    T_char   |
-    R_true   |
-    R_false  ;
+    ARITMETICOS       |
+    RELACIONALES      |
+    LOGICAS           |
+    TERNARIO          |
+    CASTEO            |
+    ACCESOVECTOR      |
+    FUNCIONESNATIVAS  |
+    LLAMADAFUNCION    |
+    T_id              |
+    T_int             |
+    T_double          |
+    T_string          |
+    T_char            |
+    R_true            |
+    R_false           |
+    '(' EXPRESION ')' ;
+
+ARITMETICOS :
+    EXPRESION '+' EXPRESION               |
+    EXPRESION '-' EXPRESION               |
+    EXPRESION '*' EXPRESION               |
+    EXPRESION '/' EXPRESION               |
+    EXPRESION '%' EXPRESION               |
+    '-' EXPRESION %prec T_uminus          |
+    R_pow '(' EXPRESION ',' EXPRESION ')' ;
+
+RELACIONALES :
+    EXPRESION '==' EXPRESION |
+    EXPRESION '!=' EXPRESION |
+    EXPRESION '<=' EXPRESION |
+    EXPRESION '>=' EXPRESION |
+    EXPRESION '<'  EXPRESION |
+    EXPRESION '>'  EXPRESION ;
+
+LOGICAS :
+    EXPRESION '||' EXPRESION |
+    EXPRESION '&&' EXPRESION |
+    '!' EXPRESION            ;
+
+TERNARIO :
+    EXPRESION '?' EXPRESION ':' EXPRESION ;
+
+CASTEO :
+    '(' TIPO ')' EXPRESION ;
+
+ACCESOVECTOR :
+    T_id '[' EXPRESION ']' '[' EXPRESION ']' |
+    T_id '[' EXPRESION ']'                   ;
+
+FUNCIONESNATIVAS :
+    R_toLower  '(' EXP ')'   |
+    R_toUpper  '(' EXP ')'   |
+    R_round    '(' EXP ')'   |
+    EXP '.' R_length '(' ')' |
+    R_typeOf   '(' EXP ')'   |
+    R_toString '(' EXP ')'   |
+    EXP '.' R_c_str  '(' ')' ;
