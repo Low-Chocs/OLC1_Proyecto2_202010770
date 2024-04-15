@@ -71,7 +71,7 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var parser = (function(){
+var Parser = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,9],$V1=[1,11],$V2=[1,12],$V3=[1,13],$V4=[1,14],$V5=[1,15],$V6=[1,16],$V7=[1,17],$V8=[2,5,63,68,69,70,71,72,73],$V9=[27,30,39],$Va=[24,26],$Vb=[2,25],$Vc=[1,30],$Vd=[1,33],$Ve=[1,43],$Vf=[1,50],$Vg=[1,44],$Vh=[1,45],$Vi=[1,46],$Vj=[1,47],$Vk=[1,48],$Vl=[1,49],$Vm=[1,51],$Vn=[1,52],$Vo=[1,53],$Vp=[1,54],$Vq=[1,57],$Vr=[1,55],$Vs=[1,56],$Vt=[1,58],$Vu=[1,59],$Vv=[1,71],$Vw=[1,72],$Vx=[1,73],$Vy=[1,74],$Vz=[1,75],$VA=[1,76],$VB=[1,77],$VC=[1,78],$VD=[1,79],$VE=[1,80],$VF=[1,81],$VG=[1,82],$VH=[1,83],$VI=[1,84],$VJ=[8,26,31,39,50,66,87,88,89,90,91,93,94,95,96,97,98,99,100,102],$VK=[1,100],$VL=[1,102],$VM=[26,39],$VN=[1,107],$VO=[26,31,39],$VP=[8,26,31,39,50,66,99,100,102],$VQ=[1,136],$VR=[1,152],$VS=[1,154],$VT=[1,155],$VU=[1,156],$VV=[1,157],$VW=[1,158],$VX=[1,159],$VY=[1,160],$VZ=[1,161],$V_=[1,162],$V$=[1,163],$V01=[8,26,31,39,50,66,87,88,93,94,95,96,97,98,99,100,102],$V11=[8,26,31,39,50,66,93,94,99,100,102],$V21=[8,26,31,39,50,66,93,94,95,96,97,98,99,100,102],$V31=[2,5,27,37,41,42,45,53,54,55,59,60,61,63,65,68,69,70,71,72,73],$V41=[2,27,37,42,45,53,54,55,59,60,61,65,69,70,71,72,73],$V51=[1,193],$V61=[1,190],$V71=[1,191],$V81=[1,192],$V91=[8,39],$Va1=[26,31],$Vb1=[1,263],$Vc1=[1,262],$Vd1=[45,49,52];
 var parser = {trace: function trace () { },
 yy: {},
@@ -824,9 +824,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = parser;
-exports.Parser = parser.Parser;
-exports.parse = function () { return parser.parse.apply(parser, arguments); };
+exports.parser = Parser;
+exports.Parser = Parser.Parser;
+exports.parse = function () { return Parser.parse.apply(Parser, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
