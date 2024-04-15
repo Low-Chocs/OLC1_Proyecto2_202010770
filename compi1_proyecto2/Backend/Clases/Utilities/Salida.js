@@ -10,13 +10,17 @@ function getConsole() {
     return out
 }
 
+function setConsola(print) {
+    consola += print
+}
+
 function reiniciarSalidas() {
     consola = ''
     errores.splice(0, errores.length)
 }
 
 module.exports = {
-    consola,
+    setConsola,
     errores,
     getConsole,
     reiniciarSalidas,

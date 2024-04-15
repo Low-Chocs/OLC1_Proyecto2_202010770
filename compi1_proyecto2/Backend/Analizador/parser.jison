@@ -1,3 +1,7 @@
+%{
+    const { errores } = require('../Clases/Utilities/Salida')
+%}
+
 // ANALIZADOR LEXICO
 %lex
 %options case-insensitive 
@@ -83,10 +87,22 @@ caracter \'{char}\'
 [ \n\r]                                 {}
 \/\/.*                                  {} // comentario simple
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]     {} // comentario multilínea
-.                                       {console.log({tipo: 'LEXICO', inesperado: yytext, linea: yylloc.first_line, columna: yylloc.first_column})}
+.                                       {errores.push({tipo: 'LEXICO', descripcion: `El caracter "${yytext}" no pertenece al lenguaje`, linea: yylloc.first_line, columna: yylloc.first_column + 1})}
 <<EOF>>                                 {return 'EOF'}
 
 /lex
+
+%{
+    const { Tipo } = require('../Clases/Utilities/Tipo')
+    // Instrucciones
+    const { Print } = require('../Clases/Instrucciones/Print')
+    const { Funcion } = require('../Clases/Instrucciones/Funcion')
+    const { Bloque } = require('../Clases/Instrucciones/Bloque')
+    const { Execute } = require('../Clases/Instrucciones/Execute')
+    // Expresiones
+    const { Primitivo } = require('../Clases/Expresiones/Primitivo')
+    const { Llamada } = require('../Clases/Expresiones/Llamada')
+%}
 
 // ANALIZADOR SINTACTICO
 %left '?' ':'
@@ -108,36 +124,36 @@ caracter \'{char}\'
 // GRAMÁTICA
 
 INICIO :
-    INSTRUCCIONESGLOBALES EOF |
-    EOF                       ;
+    INSTRUCCIONESGLOBALES EOF {return $1} |
+    EOF                       {return []} ;
 
 INSTRUCCIONESGLOBALES :
-    INSTRUCCIONESGLOBALES INSTRUCCIONGLOBAL |
-    INSTRUCCIONGLOBAL                       ;
+    INSTRUCCIONESGLOBALES INSTRUCCIONGLOBAL {$$.push($2)} |
+    INSTRUCCIONGLOBAL                       {$$ = [$1]  } ;
 
 INSTRUCCIONGLOBAL :
-    DECLARACION    ';' |
-    VECTOR         ';' |
-    FUNCION            |
-    LLAMADAEXECUTE ';' |
-    error {console.error({tipo: 'SINTACTICO', inesperado: yytext ,  linea: this._$.first_line , columna: this._$.first_column});} ;
+    DECLARACION    ';' {$$ = $1} |
+    VECTOR         ';' {$$ = $1} |
+    FUNCION            {$$ = $1} |
+    LLAMADAEXECUTE ';' {$$ = $1} |
+    error {errores.push({tipo: 'SINTACTICO', descripcion: `No se esperaba ${yytext}.` ,  linea: this._$.first_line , columna: this._$.first_column + 1})} ;
 
 INSTRUCCIONES :
-    INSTRUCCIONES INSTRUCCION |
-    INSTRUCCION               ;
+    INSTRUCCIONES INSTRUCCION {$$.push($2)} |
+    INSTRUCCION               {$$ = [$1]  } ;
 
 INSTRUCCION :
-    DECLARACION    ';' |
-    INCDEC         ';' |
-    VECTOR         ';' |
-    ASIGNACION     ';' |
-    IF                 |
-    SWITCH             |
-    BUCLES             |
-    TRANSFERENCIA  ';' |
-    PRINT          ';' |
-    LLAMADAFUNCION ';' |
-    error {console.error({tipo: 'SINTACTICO', inesperado: yytext ,  linea: this._$.first_line , columna: this._$.first_column});} ;
+    DECLARACION    ';' {$$ = $1} |
+    INCDEC         ';' {$$ = $1} |
+    VECTOR         ';' {$$ = $1} |
+    ASIGNACION     ';' {$$ = $1} |
+    IF                 {$$ = $1} |
+    SWITCH             {$$ = $1} |
+    BUCLES             {$$ = $1} |
+    TRANSFERENCIA  ';' {$$ = $1} |
+    PRINT          ';' {$$ = $1} |
+    LLAMADAFUNCION ';' {$$ = $1} |
+    error {errores.push({tipo: 'SINTACTICO', descripcion: `No se esperaba ${yytext}.` ,  linea: this._$.first_line , columna: this._$.first_column + 1})} ;
 
 DECLARACION :
     TIPO IDENTIFICADORES '=' EXPRESION ;
@@ -219,43 +235,43 @@ TRANSFERENCIA :
     R_return EXPRESION ;
 
 FUNCION:
-    TIPO   T_id '(' PARAMETROS ')' BLOQUE |
-    R_void T_id '(' PARAMETROS ')' BLOQUE |
-    TIPO   T_id '(' ')' BLOQUE            |
-    R_void T_id '(' ')' BLOQUE            ;
+    TIPO   T_id '(' PARAMETROS ')' BLOQUE {$$ = new Funcion(@1.first_line, @1.first_column, $2, $4, $6, $1)       } |
+    R_void T_id '(' PARAMETROS ')' BLOQUE {$$ = new Funcion(@1.first_line, @1.first_column, $2, $4, $6, Tipo.NULL)} |
+    TIPO   T_id '(' ')' BLOQUE            {$$ = new Funcion(@1.first_line, @1.first_column, $2, [], $5, $1)       } |
+    R_void T_id '(' ')' BLOQUE            {$$ = new Funcion(@1.first_line, @1.first_column, $2, [], $5, Tipo.NULL)} ;
 
 PARAMETROS:
-    PARAMETROS ',' PARAMETRO |
-    PARAMETRO                ;
+    PARAMETROS ',' PARAMETRO {$$.push($3)} |
+    PARAMETRO                {$$ = [$1]  } ;
 
 PARAMETRO:
-    TIPO T_id ;
+    TIPO T_id {$$ = [$1, $2, @1.first_line, @1.first_column]} ;
 
 BLOQUE :
-    '{' INSTRUCCIONES '}' |
-    '{' '}'               ;
+    '{' INSTRUCCIONES '}' {$$ = new Bloque(@1.first_line, @1.first_column, $2)} |
+    '{' '}'               {$$ = new Bloque(@1.first_line, @1.first_column, [])} ;
 
 LLAMADAFUNCION:
-    T_id '(' EXPRESIONES ')' |
-    T_id '(' ')'             ;
+    T_id '(' EXPRESIONES ')' {$$ = new Llamada(@1.first_line, @1.first_column, $1, $3)} |
+    T_id '(' ')'             {$$ = new Llamada(@1.first_line, @1.first_column, $1, [])} ;
 
 PRINT :
-    R_cout '<<' EXPRESION '<<' R_endl |
-    R_cout '<<' EXPRESION             ;
+    R_cout '<<' EXPRESION '<<' R_endl {$$ = new Print(@1.first_line, @1.first_column, $3, true) } |
+    R_cout '<<' EXPRESION             {$$ = new Print(@1.first_line, @1.first_column, $3, false)} ;
 
 LLAMADAEXECUTE :
-    R_execute LLAMADAFUNCION ;
+    R_execute LLAMADAFUNCION {$$ = new Execute(@1.first_line, @1.first_column, $2)} ;
 
 TIPO :
-    R_int    |
-    R_double |
-    R_bool   |
-    R_string |
-    R_char   ;
+    R_int    {$$ = Tipo.INT   } |
+    R_double {$$ = Tipo.DOUBLE} |
+    R_bool   {$$ = Tipo.BOOL  } |
+    R_string {$$ = Tipo.STRING} |
+    R_char   {$$ = Tipo.CHAR  } ;
 
 EXPRESIONES :
-    EXPRESIONES ',' EXPRESION |
-    EXPRESION                 ;
+    EXPRESIONES ',' EXPRESION {$$.push($3)} |
+    EXPRESION                 {$$ = [$1]  } ;
 
 EXPRESION :
     ARITMETICOS       |
@@ -265,15 +281,15 @@ EXPRESION :
     CASTEO            |
     ACCESOVECTOR      |
     FUNCIONESNATIVAS  |
-    LLAMADAFUNCION    |
+    LLAMADAFUNCION    {$$ = $1} |
     T_id              |
-    T_int             |
-    T_double          |
-    T_string          |
-    T_char            |
-    R_true            |
-    R_false           |
-    '(' EXPRESION ')' ;
+    T_int             {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.INT)   } |
+    T_double          {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.DOUBLE)} |
+    T_string          {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.STRING)} |
+    T_char            {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.CHAR)  } |
+    R_true            {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.BOOL)  } |
+    R_false           {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.BOOL)  } |
+    '(' EXPRESION ')' {$$ = $1} ;
 
 ARITMETICOS :
     EXPRESION '+' EXPRESION               |

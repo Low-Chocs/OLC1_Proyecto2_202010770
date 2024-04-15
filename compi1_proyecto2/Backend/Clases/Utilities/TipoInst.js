@@ -14,7 +14,7 @@ const TipoInst = {
     FOR:      "FOR",
     SWITCH:   "SWITCH",
     CASE:     "CASE",
-    MAIN:     "MAIN",
+    EXECUTE:  "EXECUTE",
 }
 
 module.exports = { TipoInst }
