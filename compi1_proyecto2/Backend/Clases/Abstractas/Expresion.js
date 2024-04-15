@@ -8,4 +8,4 @@ class Expresion {
     execute(_) {}
 }
 
-module.exports = Expresion
+module.exports = { Expresion }

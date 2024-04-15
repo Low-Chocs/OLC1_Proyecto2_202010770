@@ -1,4 +1,4 @@
-const TypeInst = {
+const TipoInst = {
     PRINT:    "PRINT",
     DECVAR:   "DECVAR",
     ASIGVAR:  "ASIGVAR",
@@ -17,4 +17,4 @@ const TypeInst = {
     MAIN:     "MAIN",
 }
 
-module.exports = TypeInst
+module.exports = { TipoInst }

@@ -7,4 +7,4 @@ class Instruccion {
     execute(_) {}
 }
 
-module.exports = Instruccion
+module.exports = { Instruccion }

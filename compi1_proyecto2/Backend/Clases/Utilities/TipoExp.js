@@ -1,4 +1,4 @@
-const TypeExp = {
+const TipoExp = {
     PRIMITIVO:   "PRIMITIVO",
     ARITMETICO:  "ARITMETICO",
     LOGICO:      "LOGICO",
@@ -14,4 +14,4 @@ const TypeExp = {
     RETURN:      "RETURN",
 }
 
-module.exports = TypeExp
+module.exports = { TipoExp }

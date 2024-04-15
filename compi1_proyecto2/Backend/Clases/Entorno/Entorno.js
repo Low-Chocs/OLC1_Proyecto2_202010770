@@ -7,4 +7,4 @@ class Entorno {
     }
 }
 
-module.exports = Entorno
+module.exports = { Entorno }

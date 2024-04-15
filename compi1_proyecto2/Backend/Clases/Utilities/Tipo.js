@@ -8,9 +8,4 @@ const Tipo = {
     NULL:    6,
 }
 
-const TipoRetorno = { value: null, type: Tipo }
-
-module.exports = {
-    Tipo,
-    TipoRetorno
-}
+module.exports = { Tipo }
