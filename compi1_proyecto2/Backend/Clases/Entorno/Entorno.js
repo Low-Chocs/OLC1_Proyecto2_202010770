@@ -17,7 +17,7 @@ class Entorno {
             tablaSimbolos.push({id: nombre.toLowerCase(), nameEnv: this.nombre, tipoID: tipoFunc == 'void' ? 'Método' : 'Función', tipo: tipoFunc, linea: funcion.linea, columna: funcion.columna + 1})
             return
         }
-        this.setError(`Redefinición de función existente (${nombre}).`, funcion.linea, funcion.columna)
+        this.setError(`Redefinición de función existente "${nombre}".`, funcion.linea, funcion.columna)
     }
 
     obtenerFuncion = (nombre) => {
@@ -37,7 +37,7 @@ class Entorno {
             tablaSimbolos.push({id: nombre.toLowerCase(), nameEnv: this.nombre, tipoID: 'Variable', tipo: this.obtenerTipo(tipo), linea: linea, columna: columna + 1})
             return
         }
-        this.setError(`Redeclaración de variable existente (${nombre}).`, linea, columna)
+        this.setError(`Redeclaración de variable existente "${nombre}".`, linea, columna)
     }
 
     obtenerVariable = (nombre) => {

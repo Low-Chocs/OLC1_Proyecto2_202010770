@@ -1,8 +1,7 @@
 class Expresion {
-    constructor(linea, columna, tipo, tipoExp) {
+    constructor(linea, columna, tipoExp) {
         this.linea = linea
         this.columna = columna
-        this.tipo = tipo
         this.tipoExp = tipoExp
     }
     execute(_) {}

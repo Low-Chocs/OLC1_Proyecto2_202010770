@@ -4,8 +4,9 @@ const { TipoExp } = require("../Utilities/TipoExp")
 
 class Primitivo extends Expresion {
     constructor(linea, columna, valor, tipo) {
-        super(linea, columna, tipo, TipoExp.PRIMITIVO)
+        super(linea, columna, TipoExp.PRIMITIVO)
         this.valor = valor
+        this.tipo = tipo
     }
 
     execute = (_) => {

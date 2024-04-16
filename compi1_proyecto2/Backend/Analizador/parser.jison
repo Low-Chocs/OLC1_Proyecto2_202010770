@@ -99,9 +99,13 @@ caracter \'{char}\'
     const { Funcion } = require('../Clases/Instrucciones/Funcion')
     const { Bloque } = require('../Clases/Instrucciones/Bloque')
     const { Execute } = require('../Clases/Instrucciones/Execute')
+    const { Break } = require('../Clases/Instrucciones/Break')
+    const { Continue } = require('../Clases/Instrucciones/Continue')
     // Expresiones
     const { Primitivo } = require('../Clases/Expresiones/Primitivo')
     const { Llamada } = require('../Clases/Expresiones/Llamada')
+    const { Return } = require('../Clases/Expresiones/Return')
+    const { AccesoVar } = require('../Clases/Expresiones/AccesoVar')
 %}
 
 // ANALIZADOR SINTACTICO
@@ -229,10 +233,10 @@ ACTUALIZACION :
     ASIGNACION ;
 
 TRANSFERENCIA :
-    R_break            |
-    R_continue         |
-    R_return           |
-    R_return EXPRESION ;
+    R_break            {$$ = new Break(@1.first_line, @1.first_column)       } |
+    R_continue         {$$ = new Continue(@1.first_line, @1.first_column)    } |
+    R_return           {$$ = new Return(@1.first_line, @1.first_column, null)} |
+    R_return EXPRESION {$$ = new Return(@1.first_line, @1.first_column, $2)  } ;
 
 FUNCION:
     TIPO   T_id '(' PARAMETROS ')' BLOQUE {$$ = new Funcion(@1.first_line, @1.first_column, $2, $4, $6, $1)       } |
@@ -282,7 +286,7 @@ EXPRESION :
     ACCESOVECTOR      |
     FUNCIONESNATIVAS  |
     LLAMADAFUNCION    {$$ = $1} |
-    T_id              |
+    T_id              {$$ = new AccesoVar(@1.first_line, @1.first_column, $1)             } |
     T_int             {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.INT)   } |
     T_double          {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.DOUBLE)} |
     T_string          {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.STRING)} |

@@ -5,7 +5,7 @@ const { TipoExp } = require("../Utilities/TipoExp")
 
 class Llamada extends Expresion {
     constructor(linea, columna, nombre, argumentos) {
-        super(linea, columna, Tipo.NULL, TipoExp.LLAMADAFUNC)
+        super(linea, columna, TipoExp.LLAMADAFUNC)
         this.nombre = nombre
         this.argumentos = argumentos
     }
@@ -18,8 +18,8 @@ class Llamada extends Expresion {
                 for(let i = 0; i < func.parametros.length; i ++) {
                     const valor = this.argumentos[i].execute(entorno)
                     const param = func.parametros
-                    if(valor.tipo == param[0]) {
-                        entornoFunc.guardarVariable(param[1], valor.valor, valor.tipo, param[2], param[3])
+                    if(valor.tipo == param[i][0]) {
+                        entornoFunc.guardarVariable(param[i][1], valor.valor, valor.tipo, param[i][2], param[i][3])
                     } else {
                         entorno.setError(`El Parámetro "${param.valor}" no es del tipo "${this.getType(param.tipo)}".`, this.linea, this.columna)
                         return
