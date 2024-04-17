@@ -15,6 +15,10 @@ caracter \'{char}\'
 
 %%
 
+\s+                                     {}
+[ \n\r]                                 {}
+\/\/.*                                  {} // comentario simple
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]     {} // comentario multilínea
 // RESERVADAS
 'int'                                   {return 'R_int'}
 'double'                                {return 'R_double'}
@@ -83,10 +87,6 @@ caracter \'{char}\'
 '<'                                     {return '<'}
 '>'                                     {return '>'}
 '?'                                     {return '?'}
-\s+                                     {}
-[ \n\r]                                 {}
-\/\/.*                                  {} // comentario simple
-[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]     {} // comentario multilínea
 .                                       {errores.push({tipo: 'LEXICO', descripcion: `El caracter "${yytext}" no pertenece al lenguaje`, linea: yylloc.first_line, columna: yylloc.first_column + 1})}
 <<EOF>>                                 {return 'EOF'}
 
@@ -102,6 +102,11 @@ caracter \'{char}\'
     const { Break } = require('../Clases/Instrucciones/Break')
     const { Continue } = require('../Clases/Instrucciones/Continue')
     const { DeclaracionVar } = require('../Clases/Instrucciones/DeclaracionVar')
+    const { AsignacionVar } = require('../Clases/Instrucciones/AsignacionVar')
+    const { IncDec } = require('../Clases/Instrucciones/IncDec')
+    const { For } = require('../Clases/Instrucciones/For')
+    const { While } = require('../Clases/Instrucciones/While')
+    const { DoWhile } = require('../Clases/Instrucciones/DoWhile')
     // Expresiones
     const { Primitivo } = require('../Clases/Expresiones/Primitivo')
     const { Llamada } = require('../Clases/Expresiones/Llamada')
@@ -112,6 +117,7 @@ caracter \'{char}\'
     const { Logico } = require('../Clases/Expresiones/Logico')
     const { Ternario } = require('../Clases/Expresiones/Ternario')
     const { Casteo } = require('../Clases/Expresiones/Casteo')
+    const { Nativas } = require('../Clases/Expresiones/Nativas')
 %}
 
 // ANALIZADOR SINTACTICO
@@ -174,8 +180,8 @@ IDENTIFICADORES :
     T_id                     {$$ = [$1]  } ;
 
 INCDEC :
-    T_id '++' |
-    T_id '--' ;
+    T_id '++' {$$ = new IncDec(@1.first_line, @1.first_column, $1, $2)} |
+    T_id '--' {$$ = new IncDec(@1.first_line, @1.first_column, $1, $2)} ;
 
 VECTOR :
     TIPO T_id '[' ']' '[' ']' '=' R_new TIPO '[' EXPRESION ']' '[' EXPRESION ']' |
@@ -196,7 +202,7 @@ VALOR :
 ASIGNACION :
     T_id '[' EXPRESION ']' '[' EXPRESION ']' '=' EXPRESION |
     T_id '[' EXPRESION ']' '=' EXPRESION                   |
-    T_id '=' EXPRESION                                     ;
+    T_id '=' EXPRESION                                     {$$ = new AsignacionVar(@1.first_line, @1.first_column, $1, $3)} ;
 
 IF:
     R_if '(' EXPRESION ')' BLOQUE               |
@@ -224,20 +230,20 @@ DEFAULT:
     RW_default ':'              ;
 
 BUCLES :
-    R_while '(' EXPRESION ')' BLOQUE          |
-    R_do BLOQUE R_while '(' EXPRESION ')' ';' |
-    R_for '(' FORARGS ')' BLOQUE              ;
+    R_while '(' EXPRESION ')' BLOQUE          {$$ = new While(@1.first_line, @1.first_column, $3, $5)  } |
+    R_do BLOQUE R_while '(' EXPRESION ')' ';' {$$ = new DoWhile(@1.first_line, @1.first_column, $5, $2)} |
+    R_for '(' FORARGS ')' BLOQUE              {$$ = new For(@1.first_line, @1.first_column, $3, $5)    } ;
 
 FORARGS :
-    INICIALIZACION ';' EXPRESION ';' ACTUALIZACION ;
+    INICIALIZACION ';' EXPRESION ';' ACTUALIZACION {$$ = [$1, $3, $5]} ;
 
 INICIALIZACION :
-    TIPO T_id '=' EXPRESION |
-    ASIGNACION ;
+    TIPO T_id '=' EXPRESION {$$ = new DeclaracionVar(@1.first_line, @1.first_column, [$2], $1, $4)} |
+    ASIGNACION              {$$ = $1} ;
 
 ACTUALIZACION :
-    INCDEC     |
-    ASIGNACION ;
+    INCDEC     {$$ = $1} |
+    ASIGNACION {$$ = $1} ;
 
 TRANSFERENCIA :
     R_break            {$$ = new Break(@1.first_line, @1.first_column)       } |
@@ -291,7 +297,7 @@ EXPRESION :
     TERNARIO          {$$ = $1} |
     CASTEO            {$$ = $1} |
     ACCESOVECTOR      |
-    FUNCIONESNATIVAS  |
+    FUNCIONESNATIVAS  {$$ = $1} |
     LLAMADAFUNCION    {$$ = $1} |
     T_id              {$$ = new AccesoVar(@1.first_line, @1.first_column, $1)             } |
     T_int             {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.INT)   } |
@@ -335,10 +341,10 @@ ACCESOVECTOR :
     T_id '[' EXPRESION ']'                   ;
 
 FUNCIONESNATIVAS :
-    R_toLower  '(' EXP ')'   |
-    R_toUpper  '(' EXP ')'   |
-    R_round    '(' EXP ')'   |
-    EXP '.' R_length '(' ')' |
-    R_typeOf   '(' EXP ')'   |
-    R_toString '(' EXP ')'   |
-    EXP '.' R_c_str  '(' ')' ;
+    R_toLower  '(' EXPRESION ')'   {$$ = new Nativas(@1.first_line, @1.first_column, $1, $3)} |
+    R_toUpper  '(' EXPRESION ')'   {$$ = new Nativas(@1.first_line, @1.first_column, $1, $3)} |
+    R_round    '(' EXPRESION ')'   {$$ = new Nativas(@1.first_line, @1.first_column, $1, $3)} |
+    EXPRESION '.' R_length '(' ')' {$$ = new Nativas(@1.first_line, @1.first_column, $3, $1)} |
+    R_typeOf   '(' EXPRESION ')'   {$$ = new Nativas(@1.first_line, @1.first_column, $1, $3)} |
+    R_toString '(' EXPRESION ')'   {$$ = new Nativas(@1.first_line, @1.first_column, $1, $3)} |
+    EXPRESION '.' R_c_str  '(' ')' {$$ = new Nativas(@1.first_line, @1.first_column, $3, $1)} ;

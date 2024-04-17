@@ -5,8 +5,6 @@ const TipoExp = {
     RELACIONAL:  "RELACIONAL",
     TERNARIO:    "TERNARIO",
     ACCESOVAR:   "ACCESOVAR",
-    INC:         "INC",
-    DEC:         "DEC",
     FUNCNATIVA:  "FUNCNATIVA",
     ACCESOVEC:   "ACCESOVEC",
     CASTEO:      "CASTEO",

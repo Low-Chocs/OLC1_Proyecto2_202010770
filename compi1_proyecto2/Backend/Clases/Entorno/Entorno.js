@@ -51,6 +51,25 @@ class Entorno {
         return null
     }
 
+    reasignarValorVariable = (nombre, valor, linea, columna) => {
+        var entorno = this
+        while(entorno) {
+            if(entorno.variables.has(nombre.toLowerCase())) {
+                let simbolo = entorno.variables.get(nombre.toLowerCase())
+                if(simbolo.tipo === valor.tipo || simbolo.tipo === Tipo.DOUBLE && valor.tipo === Tipo.INT) {
+                    simbolo.valor = valor.valor
+                    entorno.variables.set(nombre.toLowerCase(), simbolo)
+                    return true
+                }
+                this.setError(`Los tipos no coinciden en la asignación. Intenta asignar un "${this.obtenerTipo(valor.tipo)}" a un "${this.obtenerTipo(simbolo.tipo)}".`, linea, columna)
+                return false
+            }
+            entorno = entorno.anterior
+        }
+        this.setError('Resignación de valor a variable inexistente.', linea, columna)
+        return false
+    }
+
     setPrint = (print) => {
         setConsola(print)
     }
@@ -92,16 +111,14 @@ class Entorno {
             return 'char'
         }
         if(tipo === Tipo.STRING) {
-            return 'String'
+            return 'std::string'
         }
         if(tipo === Tipo.ARRAY) {
             return 'Array'
         }
-        if(tipo === Tipo.LIST) {
-            return 'List'
-        }
         return 'NULL'
     }
+
     obtenerTipoFunc = (tipo) => {
         if(tipo === Tipo.INT) {
             return 'int'
@@ -116,7 +133,7 @@ class Entorno {
             return 'char'
         }
         if(tipo === Tipo.STRING) {
-            return 'String'
+            return 'std::string'
         }
         return 'void'
     }

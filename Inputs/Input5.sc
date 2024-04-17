@@ -16,23 +16,23 @@ void funcionesEspecialesYNativas(){
     cc=round(cc);
     cout << "con round "+cc << endl;
     cout << "-----------------TYPEOF--------------------" << endl;
-    string x="soy una cadena";
+    std::string x="soy una cadena";
     int y = 50;
     double z = 78.5;
     char xx = 'a';
-    boolean yy = true;
+    bool yy = true;
     cout << "tipo: "+typeof(x) << endl;
     cout << "tipo: "+typeof(y) << endl;
     cout << "tipo: "+typeof(z) << endl;
     cout << "tipo: "+typeof(xx) << endl;
     cout << "tipo: "+typeof(yy) << endl;
     cout << "------------------LENGTH-------------------" << endl;
-    string cadena="soy una cadena";
-    cout << "tamaño: "+length(cadena) << endl;
+    std::string cadena="soy una cadena";
+    cout << "tamaño: "+cadena.length() << endl;
     cout << "------------------TOSTRING-------------------" << endl;
     int numero=105;
     cout << "tipo: "+typeof(numero) << endl;
-    cout << "tipo: "+typeof(toString(numero)) << endl;
+    cout << "tipo: "+typeof(std::toString(numero)) << endl;
 }
 
 execute funcionesEspecialesYNativas();

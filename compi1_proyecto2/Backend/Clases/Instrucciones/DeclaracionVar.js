@@ -8,10 +8,15 @@ class DeclaracionVar extends Instruccion {
         this.valor = valor
         this.tipo = tipo
     }
+
     execute = (entorno) => {
         var valor = null
         if(this.valor) {
             valor = this.valor.execute(entorno)
+            if(this.tipo !== valor.tipo || this.tipo === Tipo.DOUBLE && valor.tipo === Tipo.INT) {
+                entorno.setError(`Los tipos no coinciden en la asignación. Intenta asignar un "${this.obtenerTipo(valor.tipo)}" a un "${this.obtenerTipo(this.tipo)}".`)
+                return
+            }
         } else {
             switch(this.tipo) {
                 case Tipo.INT:
@@ -34,6 +39,28 @@ class DeclaracionVar extends Instruccion {
         for(const id of this.identificadores) {
             entorno.guardarVariable(id, valor.valor, this.tipo, this.linea, this.columna)
         }
+    }
+
+    obtenerTipo = (tipo) => {
+        if(tipo === Tipo.INT) {
+            return 'int'
+        }
+        if(tipo === Tipo.DOUBLE) {
+            return 'double'
+        }
+        if(tipo === Tipo.BOOL) {
+            return 'boolean'
+        }
+        if(tipo === Tipo.CHAR) {
+            return 'char'
+        }
+        if(tipo === Tipo.STRING) {
+            return 'std::string'
+        }
+        if(tipo === Tipo.ARRAY) {
+            return 'Array'
+        }
+        return 'NULL'
     }
 }
 

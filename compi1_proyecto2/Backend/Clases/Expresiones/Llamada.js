@@ -18,10 +18,10 @@ class Llamada extends Expresion {
                 for(let i = 0; i < func.parametros.length; i ++) {
                     const valor = this.argumentos[i].execute(entorno)
                     const param = func.parametros
-                    if(valor.tipo == param[i][0]) {
+                    if(valor.tipo == param[i][0] || valor.tipo === Tipo.DOUBLE && param[i][0] === Tipo.INT) {
                         entornoFunc.guardarVariable(param[i][1], valor.valor, valor.tipo, param[i][2], param[i][3])
                     } else {
-                        entorno.setError(`El Parámetro "${param.valor}" no es del tipo "${this.getType(param.tipo)}".`, this.linea, this.columna)
+                        entorno.setError(`El Parámetro "${param.valor}" no es del tipo "${this.obtenerTipo(param.tipo)}".`, this.linea, this.columna)
                         return
                     }
                 }
@@ -40,7 +40,7 @@ class Llamada extends Expresion {
         }
     }
 
-    getType(tipo) {
+    obtenerTipo(tipo) {
         if(tipo === Tipo.INT) {
             return 'int'
         }
@@ -54,7 +54,7 @@ class Llamada extends Expresion {
             return 'char'
         }
         if(tipo === Tipo.STRING) {
-            return 'String'
+            return 'std::string'
         }
         if(tipo === Tipo.ARRAY) {
             return 'Array'
