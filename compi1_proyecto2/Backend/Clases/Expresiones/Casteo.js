@@ -18,7 +18,7 @@ class Casteo extends Expresion {
             if(valor.tipo === Tipo.CHAR) {
                 return {valor: valor.valor.charCodeAt(0), tipo: this.destino}
             }
-            entorno.setError(`No hay casteo de "${valor.tipo}" a "${this.destino}"`, exp.linea, exp.columna)
+            entorno.setError(`No hay casteo de "${valor.tipo}" a "${this.destino}"`, this.valor.linea, this.valor.columna)
             return {valor: 'NULL', tipo: Tipo.NULL}
         }
         if(this.destino === Tipo.DOUBLE) {
@@ -28,7 +28,7 @@ class Casteo extends Expresion {
             if(valor.tipo === Tipo.CHAR) {
                 return {valor: Number(valor.valor.charCodeAt(0)), tipo: this.destino}
             }
-            entorno.setError(`No hay casteo de "${valor.tipo}" a "${this.destino}"`, exp.linea, exp.columna)
+            entorno.setError(`No hay casteo de "${valor.tipo}" a "${this.destino}"`, this.valor.linea, this.valor.columna)
             return {valor: 'NULL', tipo: Tipo.NULL}
         }
         if(this.destino === Tipo.STRING) {
@@ -38,16 +38,16 @@ class Casteo extends Expresion {
             if(valor.tipo === Tipo.DOUBLE) {
                 return {valor: String(valor.valor), tipo: this.destino}
             }
-            entorno.setError(`No hay casteo de "${valor.tipo}" a "${this.destino}"`, exp.linea, exp.columna)
+            entorno.setError(`No hay casteo de "${valor.tipo}" a "${this.destino}"`, this.valor.linea, this.valor.columna)
             return {valor: 'NULL', tipo: Tipo.NULL}
         }
         if(this.destino === Tipo.CHAR) {
             if(valor.tipo === Tipo.INT) {
                 return {valor: String.fromCharCode(valor.valor), tipo: this.destino}
             }
-            entorno.setError(`No hay casteo de "${valor.tipo}" a "${this.destino}"`, exp.linea, exp.columna)
+            entorno.setError(`No hay casteo de "${valor.tipo}" a "${this.destino}"`, this.valor.linea, this.valor.columna)
         }
-        entorno.setError(`No hay casteo de "${valor.tipo}" a "${this.destino}"`, exp.linea, exp.columna)
+        entorno.setError(`No hay casteo de "${valor.tipo}" a "${this.destino}"`, this.linea, this.columna)
         return {valor: 'NULL', tipo: Tipo.NULL}
     }
 }
