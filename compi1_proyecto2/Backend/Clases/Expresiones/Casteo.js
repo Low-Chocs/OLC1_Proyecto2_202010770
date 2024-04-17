@@ -4,7 +4,7 @@ const { Tipo } = require("../Utilities/Tipo")
 
 class Casteo extends Expresion {
     constructor(linea, columna, destino, valor) {
-        super(linea, columna, destino, TipoExp.CASTEO)
+        super(linea, columna, TipoExp.CASTEO)
         this.destino = destino
         this.valor = valor
     }

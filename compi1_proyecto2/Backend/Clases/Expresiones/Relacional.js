@@ -4,7 +4,7 @@ const { TipoExp } = require("../Utilities/TipoExp")
 
 class Relacional extends Expresion {
     constructor(linea, columna, exp1, signo, exp2) {
-        super(linea, columna, Tipo.NULL, TipoExp.RELACIONAL)
+        super(linea, columna, TipoExp.RELACIONAL)
         this.exp1 = exp1
         this.signo = signo
         this.exp2 = exp2
