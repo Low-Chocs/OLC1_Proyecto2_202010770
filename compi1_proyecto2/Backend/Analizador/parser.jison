@@ -101,11 +101,17 @@ caracter \'{char}\'
     const { Execute } = require('../Clases/Instrucciones/Execute')
     const { Break } = require('../Clases/Instrucciones/Break')
     const { Continue } = require('../Clases/Instrucciones/Continue')
+    const { DeclaracionVar } = require('../Clases/Instrucciones/DeclaracionVar')
     // Expresiones
     const { Primitivo } = require('../Clases/Expresiones/Primitivo')
     const { Llamada } = require('../Clases/Expresiones/Llamada')
     const { Return } = require('../Clases/Expresiones/Return')
     const { AccesoVar } = require('../Clases/Expresiones/AccesoVar')
+    const { Aritmetico } = require('../Clases/Expresiones/Aritmetico')
+    const { Relacional } = require('../Clases/Expresiones/Relacional')
+    const { Logico } = require('../Clases/Expresiones/Logico')
+    const { Ternario } = require('../Clases/Expresiones/Ternario')
+    const { Casteo } = require('../Clases/Expresiones/Casteo')
 %}
 
 // ANALIZADOR SINTACTICO
@@ -160,11 +166,12 @@ INSTRUCCION :
     error {errores.push({tipo: 'SINTACTICO', descripcion: `No se esperaba ${yytext}.` ,  linea: this._$.first_line , columna: this._$.first_column + 1})} ;
 
 DECLARACION :
-    TIPO IDENTIFICADORES '=' EXPRESION ;
+    TIPO IDENTIFICADORES '=' EXPRESION {$$ = new DeclaracionVar(@1.first_line, @1.first_column, $2, $1, $4)  } |
+    TIPO IDENTIFICADORES               {$$ = new DeclaracionVar(@1.first_line, @1.first_column, $2, $1, null)} ;
 
 IDENTIFICADORES :
-    IDENTIFICADORES ',' T_id |
-    T_id                     ;
+    IDENTIFICADORES ',' T_id {$$.push($3)} |
+    T_id                     {$$ = [$1]  } ;
 
 INCDEC :
     T_id '++' |
@@ -278,11 +285,11 @@ EXPRESIONES :
     EXPRESION                 {$$ = [$1]  } ;
 
 EXPRESION :
-    ARITMETICOS       |
-    RELACIONALES      |
-    LOGICAS           |
-    TERNARIO          |
-    CASTEO            |
+    ARITMETICOS       {$$ = $1} |
+    RELACIONALES      {$$ = $1} |
+    LOGICAS           {$$ = $1} |
+    TERNARIO          {$$ = $1} |
+    CASTEO            {$$ = $1} |
     ACCESOVECTOR      |
     FUNCIONESNATIVAS  |
     LLAMADAFUNCION    {$$ = $1} |
@@ -293,35 +300,35 @@ EXPRESION :
     T_char            {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.CHAR)  } |
     R_true            {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.BOOL)  } |
     R_false           {$$ = new Primitivo(@1.first_line, @1.first_column, $1, Tipo.BOOL)  } |
-    '(' EXPRESION ')' {$$ = $1} ;
+    '(' EXPRESION ')' {$$ = $2} ;
 
 ARITMETICOS :
-    EXPRESION '+' EXPRESION               |
-    EXPRESION '-' EXPRESION               |
-    EXPRESION '*' EXPRESION               |
-    EXPRESION '/' EXPRESION               |
-    EXPRESION '%' EXPRESION               |
-    '-' EXPRESION %prec T_uminus          |
-    R_pow '(' EXPRESION ',' EXPRESION ')' ;
+    EXPRESION '+' EXPRESION               {$$ = new Aritmetico(@1.first_line, @1.first_column, $1,   $2, $3)} |
+    EXPRESION '-' EXPRESION               {$$ = new Aritmetico(@1.first_line, @1.first_column, $1,   $2, $3)} |
+    EXPRESION '*' EXPRESION               {$$ = new Aritmetico(@1.first_line, @1.first_column, $1,   $2, $3)} |
+    EXPRESION '/' EXPRESION               {$$ = new Aritmetico(@1.first_line, @1.first_column, $1,   $2, $3)} |
+    EXPRESION '%' EXPRESION               {$$ = new Aritmetico(@1.first_line, @1.first_column, $1,   $2, $3)} |
+    '-' EXPRESION %prec T_uminus          {$$ = new Aritmetico(@1.first_line, @1.first_column, null, $1, $2)} |
+    R_pow '(' EXPRESION ',' EXPRESION ')' {$$ = new Aritmetico(@1.first_line, @1.first_column, $3,  '^', $5)} ;
 
 RELACIONALES :
-    EXPRESION '==' EXPRESION |
-    EXPRESION '!=' EXPRESION |
-    EXPRESION '<=' EXPRESION |
-    EXPRESION '>=' EXPRESION |
-    EXPRESION '<'  EXPRESION |
-    EXPRESION '>'  EXPRESION ;
+    EXPRESION '==' EXPRESION {$$ = new Relacional(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXPRESION '!=' EXPRESION {$$ = new Relacional(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXPRESION '<=' EXPRESION {$$ = new Relacional(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXPRESION '>=' EXPRESION {$$ = new Relacional(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXPRESION '<'  EXPRESION {$$ = new Relacional(@1.first_line, @1.first_column, $1, $2, $3)} |
+    EXPRESION '>'  EXPRESION {$$ = new Relacional(@1.first_line, @1.first_column, $1, $2, $3)} ;
 
 LOGICAS :
-    EXPRESION '||' EXPRESION |
-    EXPRESION '&&' EXPRESION |
-    '!' EXPRESION            ;
+    EXPRESION '||' EXPRESION {$$ = new Logico(@1.first_line, @1.first_column, $1,   $2, $3)} |
+    EXPRESION '&&' EXPRESION {$$ = new Logico(@1.first_line, @1.first_column, $1,   $2, $3)} |
+    '!' EXPRESION            {$$ = new Logico(@1.first_line, @1.first_column, null, $1, $2)} ;
 
 TERNARIO :
-    EXPRESION '?' EXPRESION ':' EXPRESION ;
+    EXPRESION '?' EXPRESION ':' EXPRESION {$$ = new Ternario(@1.first_line, @1.first_column, $1, $3, $5)} ;
 
 CASTEO :
-    '(' TIPO ')' EXPRESION ;
+    '(' TIPO ')' EXPRESION {$$ = new Casteo(@1.first_line, @1.first_column, $2, $4)} ;
 
 ACCESOVECTOR :
     T_id '[' EXPRESION ']' '[' EXPRESION ']' |
