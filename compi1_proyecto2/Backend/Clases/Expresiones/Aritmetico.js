@@ -5,7 +5,7 @@ const { TipoExp } = require("../Utilities/TipoExp")
 
 class Aritmetico extends Expresion {
     constructor(linea, columna, exp1, signo, exp2) {
-        super(linea, columna, Tipo.NULL, TipoExp.ARITMETICO)
+        super(linea, columna, TipoExp.ARITMETICO)
         this.exp1 = exp1
         this.signo = signo
         this.exp2 = exp2

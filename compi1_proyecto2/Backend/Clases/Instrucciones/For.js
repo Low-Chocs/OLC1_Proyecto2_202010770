@@ -8,7 +8,7 @@ class For extends Instruccion {
         this.bloque = bloque
     }
     execute = (entorno) => {
-        const entornoFor = new Entorno(entorno, entorno.name)
+        const entornoFor = new Entorno(entorno, entorno.nombre)
         this.args[0].execute(entornoFor)
         var condicion = this.args[1].execute(entornoFor)
         while(condicion.valor) {

@@ -8,7 +8,7 @@ class DoWhile extends Instruccion {
         this.bloque = bloque
     }
     execute = (entorno) => {
-        const entornoWhile = new Entorno(entorno, entorno.name)
+        const entornoWhile = new Entorno(entorno, entorno.nombre)
         var condicion = null
         do {
             var bloque = this.bloque.execute(entornoWhile)
