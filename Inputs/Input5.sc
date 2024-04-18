@@ -1,4 +1,13 @@
 void funcionesEspecialesYNativas(){
+    cout << "**************SECCION DE CASTEOS***************" << endl;
+    Casteos();
+    cout << "************FIN DE SECCION DE CASTEOS*************" << endl;
+    cout << "**************SECCION DE NATIVAS***************" << endl;
+    FuncionesNativas();
+    cout << "************FIN DE SECCION DE NATIVAS*************" << endl;
+}
+
+void funcionesNativas() {
     int a = 15;
     cout << "------------------TOLOWER-------------------" << endl;
     cout << "SIN TOLOWER" << endl;
@@ -35,10 +44,25 @@ void funcionesEspecialesYNativas(){
     cout << "tipo: "+typeof(std::toString(numero)) << endl;
 }
 
+void Casteos(){
+    cout << "int a "+typeof((double) 1789) << endl;
+    cout << "double a "+ typeof((int) 258.2) << endl;
+    cout << "char a "+ typeof((double) 'F') << endl;
+    cout << "int a "+typeof((char) 98) << endl;
+    cout << "double a "+typeof(std::toString(2589.97)) << endl;
+}
+
 execute funcionesEspecialesYNativas();
 
 /*
---------------------SALIDA ESPERADA-----------------
+**************SECCION DE CASTEOS***************
+int a double
+double a int
+char a double
+int a char
+double a std::string
+************FIN DE SECCION DE CASTEOS*************
+**************SECCION DE NATIVAS***************
 ------------------TOLOWER-------------------
 SIN TOLOWER
 con tolower
@@ -51,14 +75,15 @@ con round 27
 sin round: 26.4
 con round 26
 -----------------TYPEOF--------------------
-tipo: STRING
-tipo: INT
-tipo: DOUBLE
-tipo: CHAR
-tipo: BOOLEAN
+tipo: std::string
+tipo: int
+tipo: double
+tipo: char
+tipo: boolean
 ------------------LENGTH-------------------
 tamaño: 14
 ------------------TOSTRING-------------------
-tipo: INT
-tipo: STRING
+tipo: int
+tipo: std::string
+************FIN DE SECCION DE NATIVAS*************
 */

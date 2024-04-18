@@ -172,28 +172,28 @@ ASIGNACION :
     T_id '[' EXPRESION ']' '=' EXPRESION                   |
     T_id '=' EXPRESION                                     ;
 
-IF:
+IF :
     R_if '(' EXPRESION ')' BLOQUE               |
     R_if '(' EXPRESION ')' BLOQUE R_else BLOQUE |
     R_if '(' EXPRESION ')' BLOQUE R_else IF     ;
 
-SWITCH:
+SWITCH :
     R_switch '(' EXPRESION ')' '{' BLOQUESWITCH '}' ;
 
-BLOQUESWITCH:
+BLOQUESWITCH :
     CASOS DEFAULT |
     CASOS         |
     DEFAULT       ;
 
-CASOS:
+CASOS :
     CASOS CASO |
     CASO       ;
 
-CASO:
+CASO :
     R_case EXPRESION ':' INSTRUCCIONES |
     R_case EXPRESION ':'               ;
 
-DEFAULT:
+DEFAULT :
     R_default ':' INSTRUCCIONES |
     R_default ':'               ;
 
@@ -219,24 +219,24 @@ TRANSFERENCIA :
     R_return           |
     R_return EXPRESION ;
 
-FUNCION:
+FUNCION :
     TIPO   T_id '(' PARAMETROS ')' BLOQUE |
     R_void T_id '(' PARAMETROS ')' BLOQUE |
     TIPO   T_id '(' ')' BLOQUE            |
     R_void T_id '(' ')' BLOQUE            ;
 
-PARAMETROS:
+PARAMETROS :
     PARAMETROS ',' PARAMETRO |
     PARAMETRO                ;
 
-PARAMETRO:
+PARAMETRO :
     TIPO T_id ;
 
 BLOQUE :
     '{' INSTRUCCIONES '}' |
     '{' '}'               ;
 
-LLAMADAFUNCION:
+LLAMADAFUNCION :
     T_id '(' EXPRESIONES ')' |
     T_id '(' ')'             ;
 

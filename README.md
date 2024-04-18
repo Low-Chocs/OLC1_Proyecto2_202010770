@@ -1,5 +1,5 @@
 ## Precedencia de Operadores
-| Nivel | Asociatividad | ------ |
+| Nivel | Asociatividad | Token |
 | -- | ----- | ------ |
 | 10 | Izquierda  | `?` `:` |
 | 9 | Izquierda  | `\|\|` |
@@ -15,25 +15,25 @@
 
 ## Gramática Libre De Contexto
 ```html
-<INICIO> :
+<INICIO> ::=
     <INSTRUCCIONESGLOBALES> <EOF> |
     <EOF>                         ;
 
-<INSTRUCCIONESGLOBALES> :
+<INSTRUCCIONESGLOBALES> ::=
     <INSTRUCCIONESGLOBALES> <INSTRUCCIONGLOBAL> |
     <INSTRUCCIONGLOBAL>                       ;
 
-<INSTRUCCIONGLOBAL> :
+<INSTRUCCIONGLOBAL> ::=
     <DECLARACION>    ';' |
     <VECTOR>         ';' |
     <FUNCION>            |
     <LLAMADAEXECUTE> ';' ;
 
-<INSTRUCCIONES> :
+<INSTRUCCIONES> ::=
     <INSTRUCCIONES> <INSTRUCCION> |
     <INSTRUCCION>                 ;
 
-<INSTRUCCION> :
+<INSTRUCCION> ::=
     <DECLARACION>    ';' |
     <INCDEC>         ';' |
     <VECTOR>         ';' |
@@ -45,126 +45,126 @@
     <PRINT>          ';' |
     <LLAMADAFUNCION> ';' ;
 
-<DECLARACION> :
+<DECLARACION> ::=
     <TIPO> <IDENTIFICADORES> '=' <EXPRESION> |
     <TIPO> <IDENTIFICADORES>                 ;
 
-<IDENTIFICADORES> :
+<IDENTIFICADORES> ::=
     <IDENTIFICADORES> ',' T_id |
     T_id                       ;
 
-<INCDEC> :
+<INCDEC> ::=
     T_id '++' |
     T_id '--' ;
 
-<VECTOR> :
+<VECTOR> ::=
     <TIPO> T_id '[' ']' '[' ']' '=' 'new' <TIPO> '[' <EXPRESION> ']' '[' <EXPRESION> ']' |
     <TIPO> T_id '[' ']' '=' 'new' <TIPO> '[' <EXPRESION> ']'                             |
     <TIPO> T_id '[' ']' '[' ']' '=' <VECTORES>                                           |
     <TIPO> T_id '[' ']' '=' <VALOR>                                                      ;
 
-<VECTORES> :
+<VECTORES> ::=
     '[' <VALORES> ']' ;
 
-<VALORES> :
+<VALORES> ::=
     <VALORES> ',' <VALOR> |
     <VALOR>             ;
 
-<VALOR> :
+<VALOR> ::=
     '[' <EXPRESIONES> ']' ;
 
-<ASIGNACION> :
+<ASIGNACION> ::=
     T_id '[' <EXPRESION> ']' '[' <EXPRESION> ']' '=' <EXPRESION> |
     T_id '[' <EXPRESION> ']' '=' <EXPRESION>                     |
     T_id '=' <EXPRESION>                                         ;
 
-<IF>:
+<IF> ::=
     'if' '(' <EXPRESION> ')' <BLOQUE>                 |
     'if' '(' <EXPRESION> ')' <BLOQUE> 'else' <BLOQUE> |
     'if' '(' <EXPRESION> ')' <BLOQUE> 'else' <IF>     ;
 
-<SWITCH>:
+<SWITCH> ::=
     'switch' '(' <EXPRESION> ')' '{' <BLOQUESWITCH> '}' ;
 
-<BLOQUESWITCH>:
+<BLOQUESWITCH> ::=
     <CASOS> <DEFAULT> |
     <CASOS>           |
     <DEFAULT>         ;
 
-<CASOS>:
+<CASOS> ::=
     <CASOS> <CASO> |
     <CASO>         ;
 
-<CASO>:
+<CASO> ::=
     'case' <EXPRESION> ':' <INSTRUCCIONES> |
     'case' <EXPRESION> ':'                 ;
 
-<DEFAULT>:
+<DEFAULT> ::=
     'default' ':' <INSTRUCCIONES> |
     'default' ':'                 ;
 
-<BUCLES> :
+<BUCLES> ::=
     'while' '(' <EXPRESION> ')' <BLOQUE>          |
     'do' <BLOQUE> 'while' '(' <EXPRESION> ')' ';' |
     'for' '(' <FORARGS> ')' <BLOQUE>              ;
 
-<FORARGS> :
+<FORARGS> ::=
     <INICIALIZACION> ';' <EXPRESION> ';' <ACTUALIZACION> ;
 
-<INICIALIZACION> :
+<INICIALIZACION> ::=
     <TIPO> T_id '=' <EXPRESION> |
     <ASIGNACION>                ;
 
-<ACTUALIZACION> :
+<ACTUALIZACION> ::=
     <INCDEC>     |
     <ASIGNACION> ;
 
-<TRANSFERENCIA> :
+<TRANSFERENCIA> ::=
     'break'              |
     'continue'           |
     'return'             |
     'return' <EXPRESION> ;
 
-<FUNCION>:
+<FUNCION> ::=
     <TIPO>   T_id '(' <PARAMETROS> ')' <BLOQUE> |
     'void' T_id '(' <PARAMETROS> ')' <BLOQUE>   |
     <TIPO>   T_id '(' ')' <BLOQUE>              |
     'void' T_id '(' ')' <BLOQUE>                ;
 
-<PARAMETROS>:
+<PARAMETROS> ::=
     <PARAMETROS> ',' <PARAMETRO> |
     <PARAMETRO>                  ;
 
-<PARAMETRO>:
+<PARAMETRO> ::=
     <TIPO> T_id ;
 
-<BLOQUE> :
+<BLOQUE> ::=
     '{' <INSTRUCCIONES> '}' |
     '{' '}'                 ;
 
-<LLAMADAFUNCION>:
+<LLAMADAFUNCION> ::=
     T_id '(' <EXPRESIONES> ')' |
     T_id '(' ')'               ;
 
-<PRINT> :
+<PRINT> ::=
     'cout' '<<' <EXPRESION> '<<' 'endl' |
     'cout' '<<' <EXPRESION>             ;
 
-<LLAMADAEXECUTE> :
+<LLAMADAEXECUTE> ::=
     'execute' <LLAMADAFUNCION> ;
 
-<TIPO> :
+<TIPO> ::=
     'int'         |
     'double'      |
     'bool'        |
     'std::string' |
     'char'        ;
 
-<EXPRESIONES> :
+<EXPRESIONES> ::=
     <EXPRESIONES> ',' <EXPRESION> |
     <EXPRESION>                   ;
 
-<EXPRESION> :
+<EXPRESION> ::=
     <ARITMETICOS>       |
     <RELACIONALES>      |
     <LOGICAS>           |
@@ -182,7 +182,7 @@
     'false'             |
     '(' <EXPRESION> ')' ;
 
-<ARITMETICOS> :
+<ARITMETICOS> ::=
     <EXPRESION> '+' <EXPRESION>               |
     <EXPRESION> '-' <EXPRESION>               |
     <EXPRESION> '*' <EXPRESION>               |
@@ -191,7 +191,7 @@
     '-' <EXPRESION> %prec T_uminus            |
     'pow' '(' <EXPRESION> ',' <EXPRESION> ')' ;
 
-<RELACIONALES> :
+<RELACIONALES> ::=
     <EXPRESION> '==' <EXPRESION> |
     <EXPRESION> '!=' <EXPRESION> |
     <EXPRESION> '<=' <EXPRESION> |
@@ -199,22 +199,22 @@
     <EXPRESION> '<'  <EXPRESION> |
     <EXPRESION> '>'  <EXPRESION> ;
 
-<LOGICAS> :
+<LOGICAS> ::=
     <EXPRESION> '||' <EXPRESION> |
     <EXPRESION> '&&' <EXPRESION> |
     '!' <EXPRESION>              ;
 
-<TERNARIO> :
+<TERNARIO> ::=
     <EXPRESION> '?' <EXPRESION> ':' <EXPRESION> ;
 
-<CASTEO> :
+<CASTEO> ::=
     '(' <TIPO> ')' <EXPRESION> ;
 
-<ACCESOVECTOR> :
+<ACCESOVECTOR> ::=
     T_id '[' <EXPRESION> ']' '[' <EXPRESION> ']' |
     T_id '[' <EXPRESION> ']'                     ;
 
-<FUNCIONESNATIVAS> :
+<FUNCIONESNATIVAS> ::=
     'toLower'       '(' <EXPRESION> ')'  |
     'toUpper'       '(' <EXPRESION> ')'  |
     'round'         '(' <EXPRESION> ')'  |
