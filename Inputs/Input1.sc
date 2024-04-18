@@ -8,7 +8,7 @@ void inicial() {
     } else {
         int factorial = 1;
         for(int i = 1; i <= numero; i ++) {
-            factorial = factorial * i;
+            factoria = factorial * i;
         }
         cout << factorial << endl;
     }

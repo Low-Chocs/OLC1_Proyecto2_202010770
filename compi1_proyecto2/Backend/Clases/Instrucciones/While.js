@@ -8,7 +8,7 @@ class While extends Instruccion {
         this.bloque = bloque
     }
     execute = (entorno) => {
-        const entornoWhile = new Entorno(entorno, entorno.nombre)
+        const entornoWhile = new Entorno(entorno, entorno.name)
         var condicion = this.condicion.execute(entornoWhile)
         while(condicion.valor) {
             var bloque = this.bloque.execute(entornoWhile)
