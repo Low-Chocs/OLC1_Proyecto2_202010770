@@ -26,7 +26,7 @@ class Nativas extends Expresion {
             case 'std::tostring':
                 return {valor: valor.valor.toString(), tipo: Tipo.STRING}
             case 'c_str':
-                return {valor: this.obtenerCharArray(valor.valor), tipo: Tipo.ARRAY}
+                return {valor: this.obtenerCharArray(valor.valor), tipo: Tipo.VECTOR}
             default:
                 return {valor: 'NULL', tipo: Tipo.NULL}
         }
@@ -48,8 +48,11 @@ class Nativas extends Expresion {
         if(valor.tipo === Tipo.STRING) {
             return 'std::string'
         }
-        if(valor.tipo === Tipo.ARRAY) {
+        if(valor.tipo === Tipo.VECTOR) {
             return 'Array'
+        }
+        if(valor.tipo === Tipo.MATRIZ) {
+            return 'Matrix'
         }
         return 'NULL'
     }
@@ -57,7 +60,7 @@ class Nativas extends Expresion {
     obtenerCharArray = (string) => {
         let charArray = []
         for(const character of string) {
-            charArray.push(new Primitivo(this.line, this.column, character, Tipo.CHAR))
+            charArray.push({valor: character, tipo: Tipo.CHAR})
         }
         return charArray
     }

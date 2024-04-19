@@ -68,10 +68,11 @@
 
 <VALORES> ::=
     <VALORES> ',' <VALOR> |
-    <VALOR>             ;
+    <VALOR>               ;
 
 <VALOR> ::=
-    '[' <EXPRESIONES> ']' ;
+    '[' <EXPRESIONES> ']' |
+    <EXPRESION>           ;
 
 <ASIGNACION> ::=
     T_id '[' <EXPRESION> ']' '[' <EXPRESION> ']' '=' <EXPRESION> |

@@ -38,13 +38,13 @@ class Relacional extends Expresion {
                 valor2 = this.obtenerValor(valor2)
                 return {valor: valor1.valor === valor2.valor, tipo: Tipo.BOOL}
             }
-            entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+            entorno.setError("Los tipos no son válidos para operaciones relacionales (==).", this.exp2.linea, this.exp2.columna)
             return {valor: 'NULL',tipo: Tipo.NULL}
         }
         if(valor1.tipo === Tipo.STRING && valor2.tipo === Tipo.STRING) {
             return {valor: valor1.valor === valor2.valor, tipo: Tipo.BOOL}
         }
-        entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+        entorno.setError("Los tipos no son válidos para operaciones relacionales (==).", this.exp2.linea, this.exp2.columna)
         return {valor: 'NULL',tipo: Tipo.NULL}
     }
 
@@ -57,13 +57,13 @@ class Relacional extends Expresion {
                 valor2 = this.obtenerValor(valor2)
                 return {valor: valor1.valor !== valor2.valor, tipo: Tipo.BOOL}
             }
-            entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+            entorno.setError("Los tipos no son válidos para operaciones relacionales (!=).", this.exp2.linea, this.exp2.columna)
             return {valor: 'NULL',tipo: Tipo.NULL}
         }
         if(valor1.tipo === Tipo.STRING && valor2.tipo === Tipo.STRING) {
             return {valor: valor1.valor !== valor2.valor, tipo: Tipo.BOOL}
         }
-        entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+        entorno.setError("Los tipos no son válidos para operaciones relacionales (!=).", this.exp2.linea, this.exp2.columna)
         return {valor: 'NULL',tipo: Tipo.NULL}
     }
 
@@ -76,13 +76,13 @@ class Relacional extends Expresion {
                 valor2 = this.obtenerValor(valor2)
                 return {valor: valor1.valor >= valor2.valor, tipo: Tipo.BOOL}
             }
-            entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+            entorno.setError("Los tipos no son válidos para operaciones relacionales (>=).", this.exp2.linea, this.exp2.columna)
             return {valor: 'NULL',tipo: Tipo.NULL}
         }
         if(valor1.tipo === Tipo.STRING && valor2.tipo === Tipo.STRING) {
             return {valor: valor1.valor >= valor2.valor, tipo: Tipo.BOOL}
         }
-        entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+        entorno.setError("Los tipos no son válidos para operaciones relacionales (>=).", this.exp2.linea, this.exp2.columna)
         return {valor: 'NULL',tipo: Tipo.NULL}
     }
 
@@ -95,13 +95,13 @@ class Relacional extends Expresion {
                 valor2 = this.obtenerValor(valor2)
                 return {valor: valor1.valor <= valor2.valor, tipo: Tipo.BOOL}
             }
-            entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+            entorno.setError("Los tipos no son válidos para operaciones relacionales (<=).", this.exp2.linea, this.exp2.columna)
             return {valor: 'NULL',tipo: Tipo.NULL}
         }
         if(valor1.tipo === Tipo.STRING && valor2.tipo === Tipo.STRING) {
             return {valor: valor1.valor <= valor2.valor, tipo: Tipo.BOOL}
         }
-        entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+        entorno.setError("Los tipos no son válidos para operaciones relacionales (<=).", this.exp2.linea, this.exp2.columna)
         return {valor: 'NULL',tipo: Tipo.NULL}
     }
 
@@ -114,13 +114,13 @@ class Relacional extends Expresion {
                 valor2 = this.obtenerValor(valor2)
                 return {valor: valor1.valor > valor2.valor, tipo: Tipo.BOOL}
             }
-            entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+            entorno.setError("Los tipos no son válidos para operaciones relacionales (>).", this.exp2.linea, this.exp2.columna)
             return {valor: 'NULL',tipo: Tipo.NULL}
         }
         if(valor1.tipo === Tipo.STRING && valor2.tipo === Tipo.STRING) {
             return {valor: valor1.valor > valor2.valor, tipo: Tipo.BOOL}
         }
-        entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+        entorno.setError("Los tipos no son válidos para operaciones relacionales (>).", this.exp2.linea, this.exp2.columna)
         return {valor: 'NULL',tipo: Tipo.NULL}
     }
 
@@ -133,13 +133,14 @@ class Relacional extends Expresion {
                 valor2 = this.obtenerValor(valor2)
                 return {valor: valor1.valor < valor2.valor, tipo: Tipo.BOOL}
             }
-            entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+            console.log(valor1, valor2)
+            entorno.setError("Los tipos no son válidos para operaciones relacionales (<).", this.exp2.linea, this.exp2.columna)
             return {valor: 'NULL',tipo: Tipo.NULL}
         }
         if(valor1.tipo === Tipo.STRING && valor2.tipo === Tipo.STRING) {
             return {valor: valor1.valor < valor2.valor, tipo: Tipo.BOOL}
         }
-        entorno.setError("Los tipos no son válidos para operaciones relacionales.", this.exp2.linea, this.exp2.columna)
+        entorno.setError("Los tipos no son válidos para operaciones relacionales (<).", this.exp2.linea, this.exp2.columna)
         return {valor: 'NULL',tipo: Tipo.NULL}
     }
 
