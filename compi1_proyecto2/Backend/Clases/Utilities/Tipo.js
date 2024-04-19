@@ -4,8 +4,9 @@ const Tipo = {
     BOOL:   2,
     CHAR:   3,
     STRING: 4,
-    ARRAY:  5,
-    NULL:   6,
+    VECTOR: 5,
+    MATRIZ: 6,
+    NULL:   7,
 }
 
 module.exports = { Tipo }

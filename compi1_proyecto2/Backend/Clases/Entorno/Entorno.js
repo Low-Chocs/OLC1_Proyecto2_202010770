@@ -14,7 +14,7 @@ class Entorno {
         if(!this.funciones.has(nombre.toLowerCase())) {
             this.funciones.set(nombre.toLowerCase(), funcion)
             const tipoFunc = this.obtenerTipoFunc(funcion.tipo)
-            tablaSimbolos.push({id: nombre.toLowerCase(), nameEnv: this.nombre, tipoID: tipoFunc == 'void' ? 'Método' : 'Función', tipo: tipoFunc, linea: funcion.linea, columna: funcion.columna + 1})
+            tablaSimbolos.push({nombre: nombre.toLowerCase(), nameEnv: this.nombre, tipoID: tipoFunc == 'void' ? 'Método' : 'Función', tipo: tipoFunc, linea: funcion.linea, columna: funcion.columna + 1})
             return
         }
         this.setError(`Redefinición de función existente "${nombre}".`, funcion.linea, funcion.columna)
@@ -33,8 +33,8 @@ class Entorno {
 
     guardarVariable = (nombre, valor, tipo, linea, columna) => {
         if(!this.variables.has(nombre.toLowerCase())) {
-            this.variables.set(nombre.toLowerCase(), {id: nombre.toLowerCase(), valor: valor, tipo: tipo})
-            tablaSimbolos.push({id: nombre.toLowerCase(), nameEnv: this.nombre, tipoID: 'Variable', tipo: this.obtenerTipo(tipo), linea: linea, columna: columna + 1})
+            this.variables.set(nombre.toLowerCase(), {nombre: nombre.toLowerCase(), valor: valor, tipo: tipo})
+            tablaSimbolos.push({nombre: nombre.toLowerCase(), nameEnv: this.nombre, tipoID: 'Variable', tipo: this.obtenerTipo(tipo), linea: linea, columna: columna + 1})
             return
         }
         this.setError(`Redeclaración de variable existente "${nombre}".`, linea, columna)
@@ -62,6 +62,127 @@ class Entorno {
                     return true
                 }
                 this.setError(`Los tipos no coinciden en la asignación. Intenta asignar un "${this.obtenerTipo(valor.tipo)}" a un "${this.obtenerTipo(simbolo.tipo)}".`, linea, columna)
+                return false
+            }
+            entorno = entorno.anterior
+        }
+        this.setError('Resignación de valor a variable inexistente.', linea, columna)
+        return false
+    }
+
+    guardarVector = (nombre, valor, tipo1, tipo2, linea, columna) => {
+        if(!this.variables.has(nombre.toLowerCase())) {
+            this.variables.set(nombre.toLowerCase(), {nombre: nombre.toLowerCase(), valor: valor, tipo: tipo1})
+            tablaSimbolos.push({nombre: nombre.toLowerCase(), nameEnv: this.nombre, tipoID: 'Variable', tipo: `${this.obtenerTipo(tipo2)}${this.obtenerTipoVector(tipo1)}`, linea: linea, columna: columna + 1})
+            return
+        }
+        this.setError(`Redeclaración de variable existente "${nombre}".`, linea, columna)
+    }
+
+    obtenerPosicionVector = (nombre, indiceI, linea, columna) => {
+        var entorno = this
+        while(entorno) {
+            if(entorno.variables.has(nombre.toLowerCase())) {
+                var variable = entorno.variables.get(nombre.toLowerCase())
+                if(variable.tipo === Tipo.VECTOR || variable.tipo === Tipo.MATRIZ) {
+                    variable = variable.valor
+                    if(indiceI < variable.length) {
+                        return variable[indiceI]
+                    }
+                    this.setError(`Indice fuera de rango. Indice ${indiceI} en longitud ${variable.length}.`, linea, columna)
+                    return null
+                }
+                this.setError(`"${this.nombre.toLowerCase()}" no es un vector.`, linea, columna)
+                return null
+            }
+            entorno = entorno.anterior
+        }
+        this.setError(`Acceso a variable inexistente "${this.nombre.toLowerCase()}".`, linea, columna)
+        return null
+    }
+
+    obtenerPosicionMatriz = (nombre, indiceI, indiceJ, linea, columna) => {
+        var entorno = this
+        while(entorno) {
+            if(entorno.variables.has(nombre.toLowerCase())) {
+                var variable = entorno.variables.get(nombre.toLowerCase())
+                if(variable.tipo === Tipo.MATRIZ) {
+                    variable = variable.valor
+                    if(indiceI < variable.length) {
+                        variable = variable[indiceI].valor
+                        if(indiceJ < variable.length) {
+                            return variable[indiceJ]
+                        }
+                        this.setError(`Indice fuera de rango. Indice ${indiceJ} en longitud ${variable.length}.`, linea, columna)
+                        return null
+                    }
+                    this.setError(`Indice fuera de rango. Indice ${indiceI} en longitud ${variable.length}.`, linea, columna)
+                    return null
+                }
+                this.setError(`"${this.nombre.toLowerCase()}" no es un vector.`, linea, columna)
+                return null
+            }
+            entorno = entorno.anterior
+        }
+        this.setError(`Acceso a variable inexistente "${this.nombre.toLowerCase()}".`, linea, columna)
+        return null
+    }
+
+    reasignarValorVector = (nombre, indiceI, valor, linea, columna) => {
+        var entorno = this
+        while(entorno) {
+            if(entorno.variables.has(nombre.toLowerCase())) {
+                var simbolo = entorno.variables.get(nombre.toLowerCase())
+                if(simbolo.tipo === Tipo.VECTOR) {
+                    var vector = simbolo.valor
+                    if(indiceI < vector.length) {
+                        var vector = vector[indiceI]
+                        if(vector.tipo === valor.tipo || vector.tipo === Tipo.DOUBLE && valor.tipo === Tipo.INT) {
+                            simbolo.valor[indiceI] = valor
+                            entorno.variables.set(nombre.toLowerCase(), simbolo)
+                            return true
+                        }
+                        this.setError(`Los tipos no coinciden en la asignación. Intenta asignar un "${this.obtenerTipo(valor.tipo)}" a un "${this.obtenerTipo(vector.tipo)}".`, linea, columna)
+                        return false
+                    }
+                    this.setError(`Indice fuera de rango. Indice ${indiceI} en longitud ${vector.length}.`, linea, columna)
+                    return false
+                }
+                this.setError(`Intenta acceder mediante índice a una variable "${this.obtenerTipo(simbolo.tipo)}".`, linea, columna)
+                return false
+            }
+            entorno = entorno.anterior
+        }
+        this.setError('Resignación de valor a variable inexistente.', linea, columna)
+        return false
+    }
+
+    reasignarValorMatriz = (nombre, indiceI, indiceJ, valor, linea, columna) => {
+        var entorno = this
+        while(entorno) {
+            if(entorno.variables.has(nombre.toLowerCase())) {
+                var simbolo = entorno.variables.get(nombre.toLowerCase())
+                if(simbolo.tipo === Tipo.MATRIZ) {
+                    var vector = simbolo.valor
+                    if(indiceI < vector.length) {
+                        var vector = vector[indiceI].valor
+                        if(indiceJ < vector.length) {
+                            vector = vector[indiceJ]
+                            if(vector.tipo === valor.tipo || vector.tipo === Tipo.DOUBLE && valor.tipo === Tipo.INT) {
+                                simbolo.valor[indiceI].valor[indiceJ] = valor
+                                entorno.variables.set(nombre.toLowerCase(), simbolo)
+                                return true
+                            }
+                            this.setError(`Los tipos no coinciden en la asignación. Intenta asignar un "${this.obtenerTipo(valor.tipo)}" a un "${this.obtenerTipo(vector.tipo)}".`, linea, columna)
+                            return false
+                        }
+                        this.setError(`Indice fuera de rango. Indice ${indiceJ} en longitud ${vector.length}.`, linea, columna)
+                        return false
+                    }
+                    this.setError(`Indice fuera de rango. Indice ${indiceI} en longitud ${vector.length}.`, linea, columna)
+                    return false
+                }
+                this.setError(`Intenta acceder mediante índice a una variable "${this.obtenerTipo(simbolo.tipo)}".`, linea, columna)
                 return false
             }
             entorno = entorno.anterior
@@ -113,10 +234,17 @@ class Entorno {
         if(tipo === Tipo.STRING) {
             return 'std::string'
         }
-        if(tipo === Tipo.ARRAY) {
+        if(tipo === Tipo.VECTOR) {
             return 'Array'
         }
         return 'NULL'
+    }
+
+    obtenerTipoVector = (tipo) => {
+        if(tipo == Tipo.VECTOR) {
+            return '[]'
+        }
+        return '[][]'
     }
 
     obtenerTipoFunc = (tipo) => {

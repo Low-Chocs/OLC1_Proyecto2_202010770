@@ -1,9 +1,11 @@
 const TipoInst = {
     PRINT:    "PRINT",
     DECVAR:   "DECVAR",
-    ASIGVAR:  "ASIGVAR",
     DECVEC:   "DECVEC",
+    DECMAT:   "DECMAT",
+    ASIGVAR:  "ASIGVAR",
     ASIGVEC:  "ASIGVEC",
+    ASIGMAT:  "ASIGMAT",
     DECFUNC:  "DECFUNC",
     BLOQUE:   "BLOQUE",
     IF:       "IF",

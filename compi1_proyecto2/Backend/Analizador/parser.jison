@@ -101,8 +101,6 @@ caracter \'{char}\'
     const { Execute } = require('../Clases/Instrucciones/Execute')
     const { Break } = require('../Clases/Instrucciones/Break')
     const { Continue } = require('../Clases/Instrucciones/Continue')
-    const { DeclaracionVar } = require('../Clases/Instrucciones/DeclaracionVar')
-    const { AsignacionVar } = require('../Clases/Instrucciones/AsignacionVar')
     const { IncDec } = require('../Clases/Instrucciones/IncDec')
     const { For } = require('../Clases/Instrucciones/For')
     const { While } = require('../Clases/Instrucciones/While')
@@ -110,17 +108,25 @@ caracter \'{char}\'
     const { If } = require('../Clases/Instrucciones/If')
     const { Switch } = require('../Clases/Instrucciones/Switch')
     const { Case } = require('../Clases/Instrucciones/Case')
+    const { DeclaracionVar } = require('../Clases/Instrucciones/DeclaracionVar')
+    const { DeclaracionVec } = require('../Clases/Instrucciones/DeclaracionVec')
+    const { DeclaracionMat } = require('../Clases/Instrucciones/DeclaracionMat')
+    const { AsignacionVar } = require('../Clases/Instrucciones/AsignacionVar')
+    const { AsignacionVec } = require('../Clases/Instrucciones/AsignacionVec')
+    const { AsignacionMat } = require('../Clases/Instrucciones/AsignacionMat')
     // Expresiones
     const { Primitivo } = require('../Clases/Expresiones/Primitivo')
     const { Llamada } = require('../Clases/Expresiones/Llamada')
     const { Return } = require('../Clases/Expresiones/Return')
-    const { AccesoVar } = require('../Clases/Expresiones/AccesoVar')
     const { Aritmetico } = require('../Clases/Expresiones/Aritmetico')
     const { Relacional } = require('../Clases/Expresiones/Relacional')
     const { Logico } = require('../Clases/Expresiones/Logico')
     const { Ternario } = require('../Clases/Expresiones/Ternario')
     const { Casteo } = require('../Clases/Expresiones/Casteo')
     const { Nativas } = require('../Clases/Expresiones/Nativas')
+    const { AccesoVar } = require('../Clases/Expresiones/AccesoVar')
+    const { AccesoVec } = require('../Clases/Expresiones/AccesoVec')
+    const { AccesoMat } = require('../Clases/Expresiones/AccesoMat')
 %}
 
 // ANALIZADOR SINTACTICO
@@ -171,8 +177,7 @@ INSTRUCCION :
     BUCLES             {$$ = $1} |
     TRANSFERENCIA  ';' {$$ = $1} |
     PRINT          ';' {$$ = $1} |
-    LLAMADAFUNCION ';' {$$ = $1} |
-    error {errores.push({tipo: 'SINTACTICO', descripcion: `No se esperaba ${yytext}.` ,  linea: this._$.first_line , columna: this._$.first_column + 1})} ;
+    LLAMADAFUNCION ';' {$$ = $1} ;
 
 DECLARACION :
     TIPO IDENTIFICADORES '=' EXPRESION {$$ = new DeclaracionVar(@1.first_line, @1.first_column, $2, $1, $4)  } |
@@ -187,25 +192,26 @@ INCDEC :
     T_id '--' {$$ = new IncDec(@1.first_line, @1.first_column, $1, $2)} ;
 
 VECTOR :
-    TIPO T_id '[' ']' '[' ']' '=' R_new TIPO '[' EXPRESION ']' '[' EXPRESION ']' |
-    TIPO T_id '[' ']' '=' R_new TIPO '[' EXPRESION ']'                           |
-    TIPO T_id '[' ']' '[' ']' '=' VECTORES                                       |
-    TIPO T_id '[' ']' '=' VALOR                                                  ;
+    TIPO T_id '[' ']' '[' ']' '=' R_new TIPO '[' EXPRESION ']' '[' EXPRESION ']' {$$ = new DeclaracionMat(@1.first_line, @1.first_column, $2, $1, $9, $11, $14, null) } |
+    TIPO T_id '[' ']' '=' R_new TIPO '[' EXPRESION ']'                           {$$ = new DeclaracionVec(@1.first_line, @1.first_column, $2, $1, $7, $9, null)       } |
+    TIPO T_id '[' ']' '[' ']' '=' VECTORES                                       {$$ = new DeclaracionMat(@1.first_line, @1.first_column, $2, $1, Tipo.NULL, 0, 0, $8)} |
+    TIPO T_id '[' ']' '=' VALOR                                                  {$$ = new DeclaracionVec(@1.first_line, @1.first_column, $2, $1, Tipo.NULL, 0, $6)   } ;
 
 VECTORES :
-    '[' VALORES ']' ;
+    '[' VALORES ']' {$$ = $2} ;
 
 VALORES :
-    VALORES ',' VALOR |
-    VALOR             ;
+    VALORES ',' VALOR {$$.push($3)} |
+    VALOR             {$$ = [$1]  } ;
 
 VALOR :
-    '[' EXPRESIONES ']' ;
+    '[' EXPRESIONES ']' {$$ = $2} |
+    EXPRESION           {$$ = $1} ;
 
 ASIGNACION :
-    T_id '[' EXPRESION ']' '[' EXPRESION ']' '=' EXPRESION |
-    T_id '[' EXPRESION ']' '=' EXPRESION                   |
-    T_id '=' EXPRESION                                     {$$ = new AsignacionVar(@1.first_line, @1.first_column, $1, $3)} ;
+    T_id '[' EXPRESION ']' '[' EXPRESION ']' '=' EXPRESION {$$ = new AsignacionMat(@1.first_line, @1.first_column, $1, $3, $6, $9)} |
+    T_id '[' EXPRESION ']' '=' EXPRESION                   {$$ = new AsignacionVec(@1.first_line, @1.first_column, $1, $3, $6)    } |
+    T_id '=' EXPRESION                                     {$$ = new AsignacionVar(@1.first_line, @1.first_column, $1, $3)        } ;
 
 IF :
     R_if '(' EXPRESION ')' BLOQUE               {$$ = new If(@1.first_line, @1.first_column, $3, $5, null)} |
@@ -340,8 +346,8 @@ CASTEO :
     '(' TIPO ')' EXPRESION {$$ = new Casteo(@1.first_line, @1.first_column, $2, $4)} ;
 
 ACCESOVECTOR :
-    T_id '[' EXPRESION ']' '[' EXPRESION ']' |
-    T_id '[' EXPRESION ']'                   ;
+    T_id '[' EXPRESION ']' '[' EXPRESION ']' {$$ = new AccesoMat(@1.first_line, @1.first_column, $1, $3, $6)} |
+    T_id '[' EXPRESION ']'                   {$$ = new AccesoVec(@1.first_line, @1.first_column, $1, $3)    } ;
 
 FUNCIONESNATIVAS :
     R_toLower  '(' EXPRESION ')'   {$$ = new Nativas(@1.first_line, @1.first_column, $1, $3)} |
