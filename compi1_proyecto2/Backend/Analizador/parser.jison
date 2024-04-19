@@ -107,6 +107,9 @@ caracter \'{char}\'
     const { For } = require('../Clases/Instrucciones/For')
     const { While } = require('../Clases/Instrucciones/While')
     const { DoWhile } = require('../Clases/Instrucciones/DoWhile')
+    const { If } = require('../Clases/Instrucciones/If')
+    const { Switch } = require('../Clases/Instrucciones/Switch')
+    const { Case } = require('../Clases/Instrucciones/Case')
     // Expresiones
     const { Primitivo } = require('../Clases/Expresiones/Primitivo')
     const { Llamada } = require('../Clases/Expresiones/Llamada')
@@ -204,30 +207,30 @@ ASIGNACION :
     T_id '[' EXPRESION ']' '=' EXPRESION                   |
     T_id '=' EXPRESION                                     {$$ = new AsignacionVar(@1.first_line, @1.first_column, $1, $3)} ;
 
-IF:
-    R_if '(' EXPRESION ')' BLOQUE               |
-    R_if '(' EXPRESION ')' BLOQUE R_else BLOQUE |
-    R_if '(' EXPRESION ')' BLOQUE R_else IF     ;
+IF :
+    R_if '(' EXPRESION ')' BLOQUE               {$$ = new If(@1.first_line, @1.first_column, $3, $5, null)} |
+    R_if '(' EXPRESION ')' BLOQUE R_else BLOQUE {$$ = new If(@1.first_line, @1.first_column, $3, $5, $7)  } |
+    R_if '(' EXPRESION ')' BLOQUE R_else IF     {$$ = new If(@1.first_line, @1.first_column, $3, $5, $7)  } ;
 
-SWITCH:
-    R_switch '(' EXPRESION ')' '{' CASEBLOCK '}' ;
+SWITCH :
+    R_switch '(' EXPRESION ')' '{' BLOQUESWITCH '}' {$$ = new Switch(@1.first_line, @1.first_column, $3, $6[0], $6[1])} ;
 
-CASEBLOCK:
-    CASELIST DEFAULT |
-    CASELIST         |
-    DEFAULT          ;
+BLOQUESWITCH :
+    CASOS DEFAULT {$$ = [$1, $2]  } |
+    CASOS         {$$ = [$1, null]} |
+    DEFAULT       {$$ = [null, $1]} ;
 
-CASELIST:
-    CASELIST CASE |
-    CASE          ;
+CASOS :
+    CASOS CASO {$$.push($2)} |
+    CASO       {$$ = [$1]  } ;
 
-CASE:
-    R_case EXPRESION ':' INSTRUCTIONS |
-    R_case EXPRESION ':'              ;
+CASO :
+    R_case EXPRESION ':' INSTRUCCIONES {$$ = new Case(@1.first_line, @1.first_column, $2, new Bloque(@4.first_line, @4.first_column, $4))} |
+    R_case EXPRESION ':'               {$$ = new Case(@1.first_line, @1.first_column, $2, new Bloque(@1.first_line, @1.first_column, []))} ;
 
-DEFAULT:
-    RW_default ':' INSTRUCTIONS |
-    RW_default ':'              ;
+DEFAULT :
+    R_default ':' INSTRUCCIONES {$$ = new Bloque(@1.first_line, @1.first_column, $3)} |
+    R_default ':'               {$$ = new Bloque(@1.first_line, @1.first_column, [])} ;
 
 BUCLES :
     R_while '(' EXPRESION ')' BLOQUE          {$$ = new While(@1.first_line, @1.first_column, $3, $5)  } |
@@ -251,24 +254,24 @@ TRANSFERENCIA :
     R_return           {$$ = new Return(@1.first_line, @1.first_column, null)} |
     R_return EXPRESION {$$ = new Return(@1.first_line, @1.first_column, $2)  } ;
 
-FUNCION:
+FUNCION :
     TIPO   T_id '(' PARAMETROS ')' BLOQUE {$$ = new Funcion(@1.first_line, @1.first_column, $2, $4, $6, $1)       } |
     R_void T_id '(' PARAMETROS ')' BLOQUE {$$ = new Funcion(@1.first_line, @1.first_column, $2, $4, $6, Tipo.NULL)} |
     TIPO   T_id '(' ')' BLOQUE            {$$ = new Funcion(@1.first_line, @1.first_column, $2, [], $5, $1)       } |
     R_void T_id '(' ')' BLOQUE            {$$ = new Funcion(@1.first_line, @1.first_column, $2, [], $5, Tipo.NULL)} ;
 
-PARAMETROS:
+PARAMETROS :
     PARAMETROS ',' PARAMETRO {$$.push($3)} |
     PARAMETRO                {$$ = [$1]  } ;
 
-PARAMETRO:
+PARAMETRO :
     TIPO T_id {$$ = [$1, $2, @1.first_line, @1.first_column]} ;
 
 BLOQUE :
     '{' INSTRUCCIONES '}' {$$ = new Bloque(@1.first_line, @1.first_column, $2)} |
     '{' '}'               {$$ = new Bloque(@1.first_line, @1.first_column, [])} ;
 
-LLAMADAFUNCION:
+LLAMADAFUNCION :
     T_id '(' EXPRESIONES ')' {$$ = new Llamada(@1.first_line, @1.first_column, $1, $3)} |
     T_id '(' ')'             {$$ = new Llamada(@1.first_line, @1.first_column, $1, [])} ;
 
