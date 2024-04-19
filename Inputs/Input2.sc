@@ -12,3 +12,16 @@ void otra() {
     cout << true << endl;
     cout << false << endl;
 }
+
+/*
+
+SALIDA:
+
+17
+3.1416
+hola mundo
+A
+true
+false
+
+*/

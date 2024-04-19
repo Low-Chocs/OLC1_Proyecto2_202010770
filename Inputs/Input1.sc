@@ -21,3 +21,12 @@ int factorial(int n) {
     }
     return 1;
 }
+
+/*
+
+SALIDA:
+
+720
+6 es par
+
+*/

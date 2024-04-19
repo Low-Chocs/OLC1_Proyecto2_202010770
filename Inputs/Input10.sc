@@ -27,17 +27,29 @@ void arreglos() {
     }
     cout << "\n";
 
-    vec2[2][2] = "Hola";
+    vec2[0][0] = toUpper("Hola");
+    vec2[0][1] = toLower("hola");
+    vec2[0][2] = toUpper("Hola");
+    vec2[1][0] = toLower("Hola");
+    vec2[1][1] = toUpper("hola");
+    vec2[1][2] = toLower("Hola");
+    vec2[2][0] = toUpper("Hola");
+    vec2[2][1] = toLower("hola");
+    vec2[2][2] = toUpper("Hola");
+    vec2[3][0] = toLower("Hola");
+    vec2[3][1] = toUpper("hola");
+    vec2[3][2] = toLower("Hola");
 
     for(int i = 0; i < vec2.length(); i ++) {
         for(int j = 0; j < vec2[i].length(); j ++) {
-            cout << '\"' + vec2[i][j] + '\"';
+            cout << (i == j ? '\"' : ' ') + vec2[i][j] + (i == j ? '\"' : ' ');
             if(j < vec2[i].length() - 1) {
                 cout << " ";
             }
         }
         cout << "\n";
     }
+    cout << "\n";
 
     vec1[0] = 82;
     vec1[1] = 10;
@@ -78,3 +90,35 @@ void arreglos() {
     }
     cout << "]" << endl;
 }
+
+/*
+
+SALIDA:
+
+CHR: ASCII
+"H": 72
+"O": 79
+"L": 76
+"A": 65
+"_": 95
+"M": 77
+"U": 85
+"N": 78
+"D": 68
+"O": 79
+
+h - o - l - a
+H - O - L - A
+
+"HOLA"  hola   HOLA
+ hola  "HOLA"  hola
+ HOLA   hola  "HOLA"
+ hola   HOLA   hola
+
+VEC1 DESORDENADO
+[82, 10, 13, 50, 41]
+
+VEC1 ORDENADO
+[10, 13, 41, 50, 82]
+
+*/

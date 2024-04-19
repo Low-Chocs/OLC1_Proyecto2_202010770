@@ -24,7 +24,7 @@ void main() {
    recursividadBasica();
 
    // arreglos
-    AnalizarArreglo(arreglo1);
+    AnalizarArreglo(arreglo2);
 
     cout << "Fin de la prueba" << endl;
 
@@ -33,9 +33,9 @@ void main() {
 
 void tablaMultiplicar(int valor) {
     std::string cadenaSalida = "Final de la tabla de multiplicar";
-    for(int i=1; i<=11; i++) {
+    for(int i=1; i<=10; i++) {
         cout << valor + " x " + i + " = " + valor*i << endl;
-        if(i==11) {
+        if(i==10) {
             cout << cadenaSalida << endl;
             break;
         }
@@ -47,7 +47,7 @@ int mcd(int a, int b) {
     if(b==0) {
         return a;
     }else{
-        return mdc(b, a%b);
+        return mcd(b, (int) (a%b));
     }
 }
 
@@ -76,8 +76,10 @@ void AnalizarArreglo(int arreglo[]) {
     cout << "La cantidad de ceros en el arreglo es: " + ceros << endl;
 }
 
-// Salida de archivo de prueba
 /*
+
+SALIDA:
+
 Archivo de prueba
 Si sale compi1
 Manejo de ambitos correcto
@@ -96,4 +98,5 @@ Funcion recursiva correcta
 La suma de los elementos del arreglo es: 17
 La cantidad de ceros en el arreglo es: 8
 Fin de la prueba
+
 */

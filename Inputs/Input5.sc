@@ -55,6 +55,9 @@ void Casteos(){
 execute funcionesEspecialesYNativas();
 
 /*
+
+SALIDA:
+
 **************SECCION DE CASTEOS***************
 int a double
 double a int
@@ -86,4 +89,5 @@ tamaño: 14
 tipo: int
 tipo: std::string
 ************FIN DE SECCION DE NATIVAS*************
+
 */

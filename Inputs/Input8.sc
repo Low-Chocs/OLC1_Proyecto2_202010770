@@ -16,7 +16,7 @@ void hanoi(int n, std::string origen, std::string medio, std::string destino){
 
 /*
 
-RESULTADO
+SALIDA:
 
  1) Mover disco 1: desde A hasta C
  2) Mover disco 2: desde A hasta B

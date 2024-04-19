@@ -19,3 +19,11 @@ void inicial() {
             cout << "Es otro" << endl;
     }
 }
+
+/*
+
+SALIDA:
+
+Es 17
+
+*/

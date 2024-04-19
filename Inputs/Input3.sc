@@ -28,3 +28,16 @@ char valorChar(char n) {
 bool valorBool(bool n) {
     return n;
 }
+
+/*
+
+SALIDA:
+
+120
+3.1416
+Hola Mundo
+R
+true
+false
+
+*/

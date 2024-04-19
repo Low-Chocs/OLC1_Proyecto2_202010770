@@ -271,7 +271,9 @@ PARAMETROS :
     PARAMETRO                {$$ = [$1]  } ;
 
 PARAMETRO :
-    TIPO T_id {$$ = [$1, $2, @1.first_line, @1.first_column]} ;
+    TIPO T_id '[' ']' '[' ']' {$$ = [Tipo.MATRIZ, $2, @1.first_line, @1.first_column]} |
+    TIPO T_id '[' ']'         {$$ = [Tipo.VECTOR, $2, @1.first_line, @1.first_column]} |
+    TIPO T_id                 {$$ = [$1,          $2, @1.first_line, @1.first_column]} ;
 
 BLOQUE :
     '{' INSTRUCCIONES '}' {$$ = new Bloque(@1.first_line, @1.first_column, $2)} |

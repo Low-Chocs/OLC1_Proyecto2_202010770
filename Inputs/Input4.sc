@@ -36,7 +36,7 @@ int ackermann(int m, int n) {
 
 /*
 
-RESULTADO
+SALIDA:
 
 factorial(6) = 720
 fibonacci(7) = 13

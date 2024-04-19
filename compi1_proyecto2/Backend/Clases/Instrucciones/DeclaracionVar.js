@@ -14,7 +14,7 @@ class DeclaracionVar extends Instruccion {
         if(this.valor) {
             valor = this.valor.execute(entorno)
             if(this.tipo !== valor.tipo || this.tipo === Tipo.DOUBLE && valor.tipo === Tipo.INT) {
-                entorno.setError(`Los tipos no coinciden en la asignación. Intenta asignar un "${this.obtenerTipo(valor.tipo)}" a un "${this.obtenerTipo(this.tipo)}".`)
+                entorno.setError(`Los tipos no coinciden en la asignación. Intenta asignar un "${this.obtenerTipo(valor.tipo)}" a un "${this.obtenerTipo(this.tipo)}".`, this.linea, this.columna)
                 return
             }
         } else {
