@@ -1,6 +1,8 @@
 const { Instruccion } = require('../Abstractas/Instruccion')
 const { TipoInst } = require('../Utilities/TipoInst')
 const { Tipo } = require('../Utilities/Tipo')
+const { Nodo } = require('../AST/Nodo')
+
 class DeclaracionVar extends Instruccion {
     constructor(linea, columna, identificadores, tipo, valor) {
         super(linea, columna, TipoInst.DECVAR)
@@ -41,6 +43,19 @@ class DeclaracionVar extends Instruccion {
         }
     }
 
+    ast = () => {
+        const nodo = new Nodo('DECLARACION')
+        const ids = new Nodo('IDENTIFICADORES')
+        for(const identificador of this.identificadores) {
+            ids.insertarHijo(new Nodo(identificador))
+        }
+        nodo.insertarHijo(ids)
+        if(this.valor) {
+            nodo.insertarHijo(this.valor.ast())
+        }
+        return nodo
+    }
+
     obtenerTipo = (tipo) => {
         if(tipo === Tipo.INT) {
             return 'int'
@@ -49,7 +64,7 @@ class DeclaracionVar extends Instruccion {
             return 'double'
         }
         if(tipo === Tipo.BOOL) {
-            return 'boolean'
+            return 'bool'
         }
         if(tipo === Tipo.CHAR) {
             return 'char'

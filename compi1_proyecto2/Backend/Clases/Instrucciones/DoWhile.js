@@ -1,12 +1,15 @@
 const { Instruccion } = require('../Abstractas/Instruccion')
 const { Entorno } = require("../Entorno/Entorno")
 const { TipoInst } = require('../Utilities/TipoInst')
+const { Nodo } = require('../AST/Nodo')
+
 class DoWhile extends Instruccion {
     constructor(line, column, condicion, bloque) {
         super(line, column, TipoInst.DOWHILE)
         this.condicion = condicion
         this.bloque = bloque
     }
+
     execute = (entorno) => {
         const entornoWhile = new Entorno(entorno, entorno.nombre)
         var condicion = null
@@ -24,6 +27,15 @@ class DoWhile extends Instruccion {
             }
             condicion = this.condicion.execute(entornoWhile)
         } while(condicion.valor)
+    }
+
+    ast = () => {
+        const nodo = new Nodo('DO WHILE')
+        nodo.insertarHijo(this.bloque.ast())
+        const condicion = new Nodo('CONDICION')
+        condicion.insertarHijo(this.condicion.ast())
+        nodo.insertarHijo(condicion)
+        return nodo
     }
 }
 

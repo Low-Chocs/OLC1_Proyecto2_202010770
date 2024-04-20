@@ -2,6 +2,7 @@ const { Expresion } = require("../Abstractas/Expresion")
 const { sum, res, mul, div, pow, mod } = require("../Utilities/Operaciones")
 const { Tipo } = require("../Utilities/Tipo")
 const { TipoExp } = require("../Utilities/TipoExp")
+const { Nodo } = require('../AST/Nodo')
 
 class Aritmetico extends Expresion {
     constructor(linea, columna, exp1, signo, exp2) {
@@ -142,6 +143,17 @@ class Aritmetico extends Expresion {
         }
         entorno.setError("Los tipos no son válidos para operaciones aritméticas (%).", this.exp2.linea, this.exp2.columna)
         return {valor: 'NULL', tipo: Tipo.NULL}
+    }
+
+    ast = () => {
+        const nodo = new Nodo(this.signo)
+        if(this.signo !== '-') {
+            nodo.insertarHijo(this.exp1.ast())
+        } else if(this.signo === '-' && this.exp1) {
+            nodo.insertarHijo(this.exp1.ast())
+        }
+        nodo.insertarHijo(this.exp2.ast())
+        return nodo
     }
 
     obtenerValor = (valor) => {

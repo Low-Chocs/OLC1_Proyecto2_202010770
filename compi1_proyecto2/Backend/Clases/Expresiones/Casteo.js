@@ -1,6 +1,7 @@
 const { Expresion } = require("../Abstractas/Expresion")
 const { TipoExp } = require("../Utilities/TipoExp")
 const { Tipo } = require("../Utilities/Tipo")
+const { Nodo } = require('../AST/Nodo')
 
 class Casteo extends Expresion {
     constructor(linea, columna, destino, valor) {
@@ -49,6 +50,38 @@ class Casteo extends Expresion {
         }
         entorno.setError(`No hay casteo de "${valor.tipo}" a "${this.destino}"`, this.linea, this.columna)
         return {valor: 'NULL', tipo: Tipo.NULL}
+    }
+
+    ast = () => {
+        const nodo = new Nodo('CAST')
+        nodo.insertarHijo(new Nodo(this.obtenerTipo(this.destino)))
+        nodo.insertarHijo(new Nodo(this.valor.ast()))
+        return nodo
+    }
+
+    obtenerTipo(tipo) {
+        if(tipo === Tipo.INT) {
+            return 'int'
+        }
+        if(tipo === Tipo.DOUBLE) {
+            return 'double'
+        }
+        if(tipo === Tipo.BOOLEAN) {
+            return 'bool'
+        }
+        if(tipo === Tipo.CHAR) {
+            return 'char'
+        }
+        if(tipo === Tipo.STRING) {
+            return 'std::string'
+        }
+        if(tipo === Tipo.ARRAY) {
+            return 'Array'
+        }
+        if(tipo === Tipo.LIST) {
+            return 'List'
+        }
+        return 'NULL'
     }
 }
 

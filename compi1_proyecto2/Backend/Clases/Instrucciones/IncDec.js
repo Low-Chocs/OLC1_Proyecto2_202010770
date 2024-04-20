@@ -1,6 +1,8 @@
 const { Instruccion } = require("../Abstractas/Instruccion")
 const { TipoInst } = require("../Utilities/TipoInst")
 const { Tipo } = require("../Utilities/Tipo")
+const { Nodo } = require('../AST/Nodo')
+
 class IncDec extends Instruccion {
     constructor(line, column, nombre, signo) {
         super(line, column, signo == '++' ? TipoInst.INC : TipoInst.DEC)
@@ -30,6 +32,12 @@ class IncDec extends Instruccion {
                 valor = entorno.obtenerVariable(this.nombre)
                 break
         }
+    }
+
+    ast = () => {
+        const nodo = new Nodo(this.signo)
+        nodo.insertarHijo(new Nodo(this.nombre))
+        return nodo
     }
 }
 

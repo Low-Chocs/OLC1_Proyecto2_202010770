@@ -1,6 +1,7 @@
 const { Expresion } = require("../Abstractas/Expresion")
 const { Tipo } = require("../Utilities/Tipo")
 const { TipoExp } = require("../Utilities/TipoExp")
+const { Nodo } = require('../AST/Nodo')
 
 class Logico extends Expresion {
     constructor(linea, columna, exp1, signo, exp2) {
@@ -29,16 +30,27 @@ class Logico extends Expresion {
         this.tipo = Tipo.BOOL
         return {valor: valor1.valor && valor2.valor,tipo: this.tipo}
     }
+
     or = (entorno) => {
         let valor1 = this.exp1.execute(entorno)
         let valor2 = this.exp2.execute(entorno)
         this.tipo = Tipo.BOOL
         return {valor: valor1.valor || valor2.valor,tipo: this.tipo}
     }
+
     not = (entorno) => {
         let valor = this.exp2.execute(entorno)
         this.tipo = Tipo.BOOL
         return {valor: !valor.valor,tipo: this.tipo}
+    }
+
+    ast = () => {
+        const nodo = new Nodo(this.signo)
+        if(this.signo !== '!') {
+            nodo.insertarHijo(this.exp1.ast())
+        }
+        nodo.insertarHijo(this.exp2.ast())
+        return nodo
     }
 }
 

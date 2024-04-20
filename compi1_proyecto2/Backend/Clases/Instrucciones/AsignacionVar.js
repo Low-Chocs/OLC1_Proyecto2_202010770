@@ -1,5 +1,6 @@
 const { Instruccion } = require("../Abstractas/Instruccion")
 const { TipoInst } = require("../Utilities/TipoInst")
+const { Nodo } = require('../AST/Nodo')
 
 class AsignacionVar extends Instruccion {
     constructor(linea, columna, nombre, valor) {
@@ -11,6 +12,15 @@ class AsignacionVar extends Instruccion {
     execute = (entorno) => {
         const valor = this.valor.execute(entorno)
         entorno.reasignarValorVariable(this.nombre, valor, this.linea, this.columna)
+    }
+
+    ast = () => {
+        const nodo = new Nodo('ASIGNACION')
+        const igual = new Nodo('=')
+        igual.insertarHijo(new Nodo(this.nombre))
+        igual.insertarHijo(this.valor.ast())
+        nodo.insertarHijo(igual)
+        return nodo
     }
 }
 

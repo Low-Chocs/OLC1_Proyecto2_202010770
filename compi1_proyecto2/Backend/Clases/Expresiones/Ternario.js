@@ -1,6 +1,7 @@
 const { Expresion } = require("../Abstractas/Expresion")
 const { TipoExp } = require("../Utilities/TipoExp")
 const { Tipo } = require("../Utilities/Tipo")
+const { Nodo } = require('../AST/Nodo')
 
 class Ternario extends Expresion {
     constructor(line, column, condicion, verdadero, falso) {
@@ -22,6 +23,20 @@ class Ternario extends Expresion {
         }
         const falso = this.falso.execute(entorno)
         return falso
+    }
+
+    ast = () => {
+        const nodo = new Nodo('TERNARIO')
+        const condicion = new Nodo('CONDICION')
+        condicion.insertarHijo(this.condicion.ast())
+        nodo.insertarHijo(condicion)
+        const verdadero = new Nodo('VERDADERO')
+        verdadero.insertarHijo(this.verdadero.ast())
+        nodo.insertarHijo(verdadero)
+        const falso = new Nodo('FALSO')
+        falso.insertarHijo(this.falso.ast())
+        nodo.insertarHijo(falso)
+        return nodo
     }
 }
 

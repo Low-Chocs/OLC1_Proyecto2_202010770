@@ -1,6 +1,7 @@
 const { Expresion } = require("../Abstractas/Expresion")
 const { Tipo } = require("../Utilities/Tipo")
 const { TipoExp } = require("../Utilities/TipoExp")
+const { Nodo } = require('../AST/Nodo')
 
 class Relacional extends Expresion {
     constructor(linea, columna, exp1, signo, exp2) {
@@ -146,6 +147,13 @@ class Relacional extends Expresion {
 
     obtenerValor = (valor) => {
         return valor.tipo === Tipo.CHAR ? {valor: valor.valor.charCodeAt(0),tipo: Tipo.INT} : valor
+    }
+
+    ast = () => {
+        const nodo = new Nodo(this.signo)
+        nodo.insertarHijo(this.exp1.ast())
+        nodo.insertarHijo(this.exp2.ast())
+        return nodo
     }
 }
 

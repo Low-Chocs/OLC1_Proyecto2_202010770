@@ -1,7 +1,7 @@
 const { Expresion } = require("../Abstractas/Expresion")
 const { TipoExp } = require("../Utilities/TipoExp")
 const { Tipo } = require("../Utilities/Tipo")
-const { Primitivo } = require('./Primitivo')
+const { Nodo } = require('../AST/Nodo')
 
 class Nativas extends Expresion {
     constructor(line, column, func, valor) {
@@ -32,6 +32,12 @@ class Nativas extends Expresion {
         }
     }
 
+    ast = () => {
+        const nodo = new Nodo(this.func)
+        nodo.insertarHijo(this.valor.ast())
+        return nodo
+    }
+
     obtenerTypeOf = (valor) => {
         if(valor.tipo === Tipo.INT) {
             return 'int'
@@ -40,7 +46,7 @@ class Nativas extends Expresion {
             return 'double'
         }
         if(valor.tipo === Tipo.BOOL) {
-            return 'boolean'
+            return 'bool'
         }
         if(valor.tipo === Tipo.CHAR) {
             return 'char'
