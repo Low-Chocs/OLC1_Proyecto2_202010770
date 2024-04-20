@@ -1,5 +1,6 @@
 const { Instruccion } = require("../Abstractas/Instruccion")
 const { TipoInst } = require("../Utilities/TipoInst")
+const { Nodo } = require('../AST/Nodo')
 
 class Execute extends Instruccion {
     constructor(linea, columna, funcion) {
@@ -9,6 +10,12 @@ class Execute extends Instruccion {
 
     execute = (entorno) => {
         this.funcion.execute(entorno)
+    }
+
+    ast = () => {
+        const nodo = new Nodo('EXECUTE')
+        nodo.insertarHijo(this.funcion.ast())
+        return nodo
     }
 }
 

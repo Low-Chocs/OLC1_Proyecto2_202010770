@@ -1,6 +1,7 @@
 const { Instruccion } = require("../Abstractas/Instruccion")
 const { Entorno } = require("../Entorno/Entorno")
 const { TipoInst } = require("../Utilities/TipoInst")
+const { Nodo } = require('../AST/Nodo')
 
 class Bloque extends Instruccion {
     constructor(linea, columna, instrucciones) {
@@ -18,6 +19,16 @@ class Bloque extends Instruccion {
                 }
             } catch(error) {}
         }
+    }
+
+    ast = () => {
+        const nodo = new Nodo('BLOQUE')
+        for(const instruccion of this.instrucciones) {
+            try {
+                nodo.insertarHijo(instruccion.ast())
+            } catch(error) {}
+        }
+        return nodo
     }
 }
 

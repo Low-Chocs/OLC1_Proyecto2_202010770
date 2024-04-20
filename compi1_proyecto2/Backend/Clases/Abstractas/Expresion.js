@@ -4,7 +4,10 @@ class Expresion {
         this.columna = columna
         this.tipoExp = tipoExp
     }
+
     execute(_) {}
+
+    ast() {}
 }
 
 module.exports = { Expresion }

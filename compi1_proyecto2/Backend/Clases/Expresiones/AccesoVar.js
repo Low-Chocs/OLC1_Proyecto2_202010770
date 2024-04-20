@@ -1,6 +1,7 @@
 const { Expresion } = require("../Abstractas/Expresion")
 const { Tipo } = require("../Utilities/Tipo")
 const { TipoExp } = require("../Utilities/TipoExp")
+const { Nodo } = require('../AST/Nodo')
 
 class AccesoVar extends Expresion {
     constructor(linea, columna, nombre) {
@@ -15,6 +16,10 @@ class AccesoVar extends Expresion {
         }
         entorno.setError(`Acceso a variable inexistente "${this.nombre}".`, this.linea, this.columna)
         return {valor: 'NULL', tipo: Tipo.NULL}
+    }
+
+    ast = () => {
+        return new Nodo(this.nombre)
     }
 }
 

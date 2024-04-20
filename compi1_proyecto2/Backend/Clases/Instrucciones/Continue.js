@@ -1,6 +1,7 @@
 const { Instruccion } = require("../Abstractas/Instruccion")
 const { Tipo } = require("../Utilities/Tipo")
 const { TipoInst } = require("../Utilities/TipoInst")
+const { Nodo } = require('../AST/Nodo')
 
 class Continue extends Instruccion {
     constructor(linea, columna) {
@@ -9,6 +10,10 @@ class Continue extends Instruccion {
 
     execute = (_) => {
         return {valor: this.tipoInst, tipo: Tipo.NULL}
+    }
+
+    ast = () => {
+        return new Nodo('CONTINUE')
     }
 }
 

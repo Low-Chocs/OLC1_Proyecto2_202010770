@@ -39,10 +39,10 @@ class Aritmetico extends Expresion {
         this.tipo = sum[valor1.tipo][valor2.tipo]
         if(this.tipo !== Tipo.NULL) {
             if(this.tipo === Tipo.INT) {
-                return {valor: parseInt(this.obtenerValor(valor1.valor)) + parseInt(this.obtenerValor(valor2.valor)), tipo: this.tipo}
+                return {valor: parseInt(this.obtenerValor(valor1).valor) + parseInt(this.obtenerValor(valor2).valor), tipo: this.tipo}
             }
             if(this.tipo === Tipo.DOUBLE) {
-                return {valor: parseFloat(this.obtenerValor(valor1.valor)) + parseFloat(this.obtenerValor(valor2.valor)), tipo: this.tipo}
+                return {valor: parseFloat(this.obtenerValor(valor1).valor) + parseFloat(this.obtenerValor(valor2).valor), tipo: this.tipo}
             }
             else if(this.tipo === Tipo.STRING) {
                 return {valor: `${valor1.valor}${valor2.valor}`, tipo: this.tipo}
@@ -58,10 +58,10 @@ class Aritmetico extends Expresion {
         this.tipo = res[valor1.tipo][valor2.tipo]
         if(this.tipo !== Tipo.NULL) {
             if(this.tipo === Tipo.INT) {
-                return {valor: parseInt(this.obtenerValor(valor1.valor)) - parseInt(this.obtenerValor(valor2.valor)), tipo: this.tipo}
+                return {valor: parseInt(this.obtenerValor(valor1).valor) - parseInt(this.obtenerValor(valor2).valor), tipo: this.tipo}
             }
             if(this.tipo === Tipo.DOUBLE) {
-                return {valor: parseFloat(this.obtenerValor(valor1.valor)) - parseFloat(this.obtenerValor(valor2.valor)), tipo: this.tipo}
+                return {valor: parseFloat(this.obtenerValor(valor1).valor) - parseFloat(this.obtenerValor(valor2).valor), tipo: this.tipo}
             }
         }
         entorno.setError("Los tipos no son válidos para operaciones aritméticas (-).", this.exp2.linea, this.exp2.columna)
@@ -84,10 +84,10 @@ class Aritmetico extends Expresion {
         this.tipo = mul[valor1.tipo][valor2.tipo]
         if(this.tipo !== Tipo.NULL) {
             if(this.tipo === Tipo.INT) {
-                return {valor: parseInt(this.obtenerValor(valor1.valor)) * parseInt(this.obtenerValor(valor2.valor)), tipo: this.tipo}
+                return {valor: parseInt(this.obtenerValor(valor1).valor) * parseInt(this.obtenerValor(valor2).valor), tipo: this.tipo}
             }
             if(this.tipo === Tipo.DOUBLE) {
-                return {valor: parseFloat(this.obtenerValor(valor1.valor)) * parseFloat(this.obtenerValor(valor2.valor)), tipo: this.tipo}
+                return {valor: parseFloat(this.obtenerValor(valor1).valor) * parseFloat(this.obtenerValor(valor2).valor), tipo: this.tipo}
             }
         }
         entorno.setError("Los tipos no son válidos para operaciones aritméticas (*).", this.exp2.linea, this.exp2.columna)
@@ -104,7 +104,7 @@ class Aritmetico extends Expresion {
                 return {valor: 'NULL', tipo: Tipo.NULL}
             }
             if(this.tipo === Tipo.DOUBLE) {
-                return {valor: parseFloat(this.obtenerValor(valor1.valor)) / parseFloat(this.obtenerValor(valor2.valor)), tipo: this.tipo}
+                return {valor: parseFloat(this.obtenerValor(valor1).valor) / parseFloat(this.obtenerValor(valor2).valor), tipo: this.tipo}
             }
         }
         entorno.setError("Los tipos no son válidos para operaciones aritméticas (/).", this.exp2.linea, this.exp2.columna)
@@ -120,7 +120,7 @@ class Aritmetico extends Expresion {
                 return {valor: valor1.valor ** valor2.valor, tipo: this.tipo}
             }
             else if(this.tipo === Tipo.DOUBLE) {
-                return {valor: parseFloat(this.obtenerValor(valor1.valor)) ** parseFloat(this.obtenerValor(valor2.valor)), tipo: this.tipo}
+                return {valor: parseFloat(this.obtenerValor(valor1).valor) ** parseFloat(this.obtenerValor(valor2).valor), tipo: this.tipo}
             }
         }
         entorno.setError("Los tipos no son válidos para operaciones aritméticas (pow).", this.exp2.linea, this.exp2.columna)
@@ -137,7 +137,7 @@ class Aritmetico extends Expresion {
                 return {valor: 'NULL', tipo: Tipo.NULL}
             }
             if(this.tipo === Tipo.DOUBLE) {
-                return {valor: parseFloat(this.obtenerValor(valor1.valor)) % parseFloat(this.obtenerValor(valor2.valor)), tipo: this.tipo}
+                return {valor: parseFloat(this.obtenerValor(valor1).valor) % parseFloat(this.obtenerValor(valor2).valor), tipo: this.tipo}
             }
         }
         entorno.setError("Los tipos no son válidos para operaciones aritméticas (%).", this.exp2.linea, this.exp2.columna)

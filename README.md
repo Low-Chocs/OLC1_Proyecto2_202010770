@@ -137,7 +137,9 @@
     <PARAMETRO>                  ;
 
 <PARAMETRO> ::=
-    <TIPO> T_id ;
+    <TIPO> T_id '[' ']' '[' ']' |
+    <TIPO> T_id '[' ']'         |
+    <TIPO> T_id                 ;
 
 <BLOQUE> ::=
     '{' <INSTRUCCIONES> '}' |

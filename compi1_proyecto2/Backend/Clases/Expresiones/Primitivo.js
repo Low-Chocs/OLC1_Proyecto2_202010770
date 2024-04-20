@@ -1,6 +1,7 @@
 const { Expresion } = require("../Abstractas/Expresion")
 const { Tipo } = require("../Utilities/Tipo")
 const { TipoExp } = require("../Utilities/TipoExp")
+const { Nodo } = require('../AST/Nodo')
 
 class Primitivo extends Expresion {
     constructor(linea, columna, valor, tipo) {
@@ -32,6 +33,10 @@ class Primitivo extends Expresion {
                 this.valor = this.valor.replace(/\\\\/g, '\\')
                 return { valor: this.valor, tipo: this.tipo }
         }
+    }
+
+    ast = () => {
+        return new Nodo(this.valor)
     }
 }
 

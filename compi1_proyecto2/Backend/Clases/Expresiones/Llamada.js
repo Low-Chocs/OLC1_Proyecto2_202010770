@@ -2,6 +2,7 @@ const { Expresion } = require("../Abstractas/Expresion")
 const { Entorno } = require("../Entorno/Entorno")
 const { Tipo } = require("../Utilities/Tipo")
 const { TipoExp } = require("../Utilities/TipoExp")
+const { Nodo } = require('../AST/Nodo')
 
 class Llamada extends Expresion {
     constructor(linea, columna, nombre, argumentos) {
@@ -40,6 +41,16 @@ class Llamada extends Expresion {
         }
     }
 
+    ast = () => {
+        const nodo = new Nodo('LLAMADA')
+        const llamada = new Nodo(this.nombre)
+        for(const argumento of this.argumentos) {
+            llamada.insertarHijo(argumento.ast())
+        }
+        nodo.insertarHijo(llamada)
+        return nodo
+    }
+
     obtenerTipo(tipo) {
         if(tipo === Tipo.INT) {
             return 'int'
@@ -48,7 +59,7 @@ class Llamada extends Expresion {
             return 'double'
         }
         if(tipo === Tipo.BOOLEAN) {
-            return 'boolean'
+            return 'bool'
         }
         if(tipo === Tipo.CHAR) {
             return 'char'

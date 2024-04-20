@@ -4,7 +4,10 @@ class Instruccion {
         this.columna = columna
         this.tipoInst = tipoInst
     }
+
     execute(_) {}
+
+    ast() {}
 }
 
 module.exports = { Instruccion }

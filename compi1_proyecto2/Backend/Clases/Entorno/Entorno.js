@@ -66,7 +66,7 @@ class Entorno {
             }
             entorno = entorno.anterior
         }
-        this.setError('Resignación de valor a variable inexistente.', linea, columna)
+        this.setError(`Resignación de valor a variable inexistente  "${nombre}".`, linea, columna)
         return false
     }
 
@@ -97,7 +97,7 @@ class Entorno {
             }
             entorno = entorno.anterior
         }
-        this.setError(`Acceso a variable inexistente "${this.nombre.toLowerCase()}".`, linea, columna)
+        this.setError(`Acceso a variable inexistente "${this.nombre}".`, linea, columna)
         return null
     }
 
@@ -119,12 +119,12 @@ class Entorno {
                     this.setError(`Indice fuera de rango. Indice ${indiceI} en longitud ${variable.length}.`, linea, columna)
                     return null
                 }
-                this.setError(`"${this.nombre.toLowerCase()}" no es un vector.`, linea, columna)
+                this.setError(`"${this.nombre}" no es un vector.`, linea, columna)
                 return null
             }
             entorno = entorno.anterior
         }
-        this.setError(`Acceso a variable inexistente "${this.nombre.toLowerCase()}".`, linea, columna)
+        this.setError(`Acceso a variable inexistente "${this.nombre}".`, linea, columna)
         return null
     }
 
@@ -153,7 +153,7 @@ class Entorno {
             }
             entorno = entorno.anterior
         }
-        this.setError('Resignación de valor a variable inexistente.', linea, columna)
+        this.setError(`Resignación de valor a variable inexistente "${nombre}".`, linea, columna)
         return false
     }
 
@@ -187,7 +187,7 @@ class Entorno {
             }
             entorno = entorno.anterior
         }
-        this.setError('Resignación de valor a variable inexistente.', linea, columna)
+        this.setError(`Resignación de valor a variable inexistente "${nombre}".`, linea, columna)
         return false
     }
 
