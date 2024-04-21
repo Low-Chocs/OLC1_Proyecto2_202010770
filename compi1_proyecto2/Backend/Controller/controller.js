@@ -56,15 +56,12 @@ class Controller {
 
     test = (req, res) => {
         const { ruta } = req.body;
-        const fs = require('fs')
-        fs.readFile(ruta, (err, data) => {
-            if(err) {
-                res.json({message: "Error al analizar", salida: err})
-            }
-            let resultado = analizador.parse(data.toString())
-            let interpretacion = this.interpretar(resultado)
-            res.json({message: "Funcion analizar", salida: interpretacion})
-        })
+        
+        
+        let resultado = analizador.parse(ruta.toString())
+        let interpretacion = this.interpretar(resultado)
+        res.json({message: "Funcion analizar", salida: interpretacion})
+        
     }
 
     parser = (req, res) => {
