@@ -36,6 +36,8 @@ class Primitivo extends Expresion {
     }
 
     ast = () => {
+        this.valor = this.valor.replace(/\n/g, '\\n')
+        this.valor = this.valor.replace(/\t/g, '\\t')
         return new Nodo(this.valor)
     }
 }

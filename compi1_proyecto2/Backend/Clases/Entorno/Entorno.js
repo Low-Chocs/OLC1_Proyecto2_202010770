@@ -226,7 +226,7 @@ class Entorno {
             return 'double'
         }
         if(tipo === Tipo.BOOL) {
-            return 'boolean'
+            return 'bool'
         }
         if(tipo === Tipo.CHAR) {
             return 'char'
@@ -235,7 +235,10 @@ class Entorno {
             return 'std::string'
         }
         if(tipo === Tipo.VECTOR) {
-            return 'Array'
+            return 'Vector'
+        }
+        if(tipo === Tipo.MATRIZ) {
+            return 'Matrix'
         }
         return 'NULL'
     }
@@ -255,7 +258,7 @@ class Entorno {
             return 'double'
         }
         if(tipo === Tipo.BOOL) {
-            return 'boolean'
+            return 'bool'
         }
         if(tipo === Tipo.CHAR) {
             return 'char'

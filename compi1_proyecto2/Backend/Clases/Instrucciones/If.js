@@ -1,5 +1,6 @@
 const { Instruccion } = require("../Abstractas/Instruccion")
 const { TipoInst } = require("../Utilities/TipoInst")
+const { Nodo } = require('../AST/Nodo')
 
 class If extends Instruccion {
     constructor(linea, columna, condicion, bloque, _else_) {
@@ -24,6 +25,22 @@ class If extends Instruccion {
                 return _else_
             }
         }
+    }
+
+    ast = () => {
+        const nodo = new Nodo('IF')
+        const condicion = new Nodo('CONDICION')
+        condicion.insertarHijo(this.condicion.ast())
+        nodo.insertarHijo(condicion)
+        const verdadero = new Nodo('VERDADERO')
+        verdadero.insertarHijo(this.bloque.ast())
+        nodo.insertarHijo(verdadero)
+        if(this._else_) {
+            const falso = new Nodo('FALSO')
+            falso.insertarHijo(this._else_.ast())
+            nodo.insertarHijo(falso)
+        }
+        return nodo
     }
 }
 

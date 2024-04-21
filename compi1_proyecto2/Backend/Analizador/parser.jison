@@ -95,38 +95,38 @@ caracter \'{char}\'
 %{
     const { Tipo } = require('../Clases/Utilities/Tipo')
     // Instrucciones
-    const { Print } = require('../Clases/Instrucciones/Print')
-    const { Funcion } = require('../Clases/Instrucciones/Funcion')
-    const { Bloque } = require('../Clases/Instrucciones/Bloque')
-    const { Execute } = require('../Clases/Instrucciones/Execute')
-    const { Break } = require('../Clases/Instrucciones/Break')
-    const { Continue } = require('../Clases/Instrucciones/Continue')
-    const { IncDec } = require('../Clases/Instrucciones/IncDec')
-    const { For } = require('../Clases/Instrucciones/For')
-    const { While } = require('../Clases/Instrucciones/While')
-    const { DoWhile } = require('../Clases/Instrucciones/DoWhile')
     const { If } = require('../Clases/Instrucciones/If')
-    const { Switch } = require('../Clases/Instrucciones/Switch')
+    const { For } = require('../Clases/Instrucciones/For')
     const { Case } = require('../Clases/Instrucciones/Case')
-    const { DeclaracionVar } = require('../Clases/Instrucciones/DeclaracionVar')
-    const { DeclaracionVec } = require('../Clases/Instrucciones/DeclaracionVec')
-    const { DeclaracionMat } = require('../Clases/Instrucciones/DeclaracionMat')
+    const { While } = require('../Clases/Instrucciones/While')
+    const { Break } = require('../Clases/Instrucciones/Break')
+    const { Print } = require('../Clases/Instrucciones/Print')
+    const { Switch } = require('../Clases/Instrucciones/Switch')
+    const { IncDec } = require('../Clases/Instrucciones/IncDec')
+    const { Bloque } = require('../Clases/Instrucciones/Bloque')
+    const { DoWhile } = require('../Clases/Instrucciones/DoWhile')
+    const { Execute } = require('../Clases/Instrucciones/Execute')
+    const { Funcion } = require('../Clases/Instrucciones/Funcion')
+    const { Continue } = require('../Clases/Instrucciones/Continue')
     const { AsignacionVar } = require('../Clases/Instrucciones/AsignacionVar')
     const { AsignacionVec } = require('../Clases/Instrucciones/AsignacionVec')
     const { AsignacionMat } = require('../Clases/Instrucciones/AsignacionMat')
+    const { DeclaracionVar } = require('../Clases/Instrucciones/DeclaracionVar')
+    const { DeclaracionVec } = require('../Clases/Instrucciones/DeclaracionVec')
+    const { DeclaracionMat } = require('../Clases/Instrucciones/DeclaracionMat')
     // Expresiones
-    const { Primitivo } = require('../Clases/Expresiones/Primitivo')
-    const { Llamada } = require('../Clases/Expresiones/Llamada')
     const { Return } = require('../Clases/Expresiones/Return')
-    const { Aritmetico } = require('../Clases/Expresiones/Aritmetico')
-    const { Relacional } = require('../Clases/Expresiones/Relacional')
     const { Logico } = require('../Clases/Expresiones/Logico')
-    const { Ternario } = require('../Clases/Expresiones/Ternario')
     const { Casteo } = require('../Clases/Expresiones/Casteo')
+    const { Llamada } = require('../Clases/Expresiones/Llamada')
     const { Nativas } = require('../Clases/Expresiones/Nativas')
+    const { Ternario } = require('../Clases/Expresiones/Ternario')
+    const { Primitivo } = require('../Clases/Expresiones/Primitivo')
     const { AccesoVar } = require('../Clases/Expresiones/AccesoVar')
     const { AccesoVec } = require('../Clases/Expresiones/AccesoVec')
     const { AccesoMat } = require('../Clases/Expresiones/AccesoMat')
+    const { Aritmetico } = require('../Clases/Expresiones/Aritmetico')
+    const { Relacional } = require('../Clases/Expresiones/Relacional')
 %}
 
 // ANALIZADOR SINTACTICO
@@ -307,7 +307,7 @@ EXPRESION :
     LOGICAS           {$$ = $1} |
     TERNARIO          {$$ = $1} |
     CASTEO            {$$ = $1} |
-    ACCESOVECTOR      |
+    ACCESOVECTOR      {$$ = $1} |
     FUNCIONESNATIVAS  {$$ = $1} |
     LLAMADAFUNCION    {$$ = $1} |
     T_id              {$$ = new AccesoVar(@1.first_line, @1.first_column, $1)             } |

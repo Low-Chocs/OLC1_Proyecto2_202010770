@@ -55,7 +55,7 @@ class Nativas extends Expresion {
             return 'std::string'
         }
         if(valor.tipo === Tipo.VECTOR) {
-            return 'Array'
+            return 'Vector'
         }
         if(valor.tipo === Tipo.MATRIZ) {
             return 'Matrix'

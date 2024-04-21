@@ -21,7 +21,7 @@
 
 <INSTRUCCIONESGLOBALES> ::=
     <INSTRUCCIONESGLOBALES> <INSTRUCCIONGLOBAL> |
-    <INSTRUCCIONGLOBAL>                       ;
+    <INSTRUCCIONGLOBAL>                         ;
 
 <INSTRUCCIONGLOBAL> ::=
     <DECLARACION>    ';' |

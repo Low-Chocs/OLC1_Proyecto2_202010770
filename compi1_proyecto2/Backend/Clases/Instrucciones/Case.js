@@ -1,6 +1,7 @@
 const { Instruccion } = require("../Abstractas/Instruccion")
 const { Entorno } = require("../Entorno/Entorno")
 const { TipoInst } = require("../Utilities/TipoInst")
+const { Nodo } = require('../AST/Nodo')
 
 class Case extends Instruccion {
     constructor(linea, columna, caso, bloque) {
@@ -22,6 +23,13 @@ class Case extends Instruccion {
                 return bloque
             }
         }
+    }
+
+    ast = () => {
+        const nodo = new Nodo('CASE')
+        nodo.insertarHijo(this.caso.ast())
+        nodo.insertarHijo(this.bloque.ast())
+        return nodo
     }
 }
 

@@ -51,14 +51,14 @@ class Llamada extends Expresion {
         return nodo
     }
 
-    obtenerTipo(tipo) {
+    obtenerTipo = (tipo) => {
         if(tipo === Tipo.INT) {
             return 'int'
         }
         if(tipo === Tipo.DOUBLE) {
             return 'double'
         }
-        if(tipo === Tipo.BOOLEAN) {
+        if(tipo === Tipo.BOOL) {
             return 'bool'
         }
         if(tipo === Tipo.CHAR) {
@@ -67,11 +67,11 @@ class Llamada extends Expresion {
         if(tipo === Tipo.STRING) {
             return 'std::string'
         }
-        if(tipo === Tipo.ARRAY) {
-            return 'Array'
+        if(tipo === Tipo.VECTOR) {
+            return 'Vector'
         }
-        if(tipo === Tipo.LIST) {
-            return 'List'
+        if(tipo === Tipo.MATRIZ) {
+            return 'Matrix'
         }
         return 'NULL'
     }

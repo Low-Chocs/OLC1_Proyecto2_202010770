@@ -55,7 +55,7 @@ class Funcion extends Instruccion {
             return 'std::string'
         }
         if(tipo === Tipo.VECTOR) {
-            return 'Array'
+            return 'Vector'
         }
         if(tipo === Tipo.MATRIZ) {
             return 'Matrix'

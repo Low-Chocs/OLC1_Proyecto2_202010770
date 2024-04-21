@@ -1,6 +1,7 @@
 const { Expresion } = require("../Abstractas/Expresion")
 const { Tipo } = require("../Utilities/Tipo")
 const { TipoExp } = require("../Utilities/TipoExp")
+const { Nodo } = require('../AST/Nodo')
 
 class AccesoMat extends Expresion {
     constructor(linea, columna, nombre, indiceI, indiceJ) {
@@ -18,6 +19,13 @@ class AccesoMat extends Expresion {
             return valor
         }
         return {valor: 'NULL', tipo: Tipo.NULL}
+    }
+
+    ast = () => {
+        const nodo = new Nodo(this.nombre)
+        nodo.insertarHijo(this.indiceI.ast())
+        nodo.insertarHijo(this.indiceJ.ast())
+        return nodo
     }
 }
 

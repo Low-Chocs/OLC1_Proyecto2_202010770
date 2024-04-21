@@ -2,6 +2,8 @@ const { Instruccion } = require('../Abstractas/Instruccion')
 const { Nativas } = require('../Expresiones/Nativas')
 const { TipoInst } = require('../Utilities/TipoInst')
 const { Tipo } = require('../Utilities/Tipo')
+const { Nodo } = require('../AST/Nodo')
+
 class DeclaracionVec extends Instruccion {
     constructor(linea, columna, nombre, tipo1, tipo2, longitudI, valores) {
         super(linea, columna, TipoInst.DECVEC)
@@ -51,6 +53,31 @@ class DeclaracionVec extends Instruccion {
         }
     }
 
+    ast = () => {
+        const nodo = new Nodo('DECLARACION')
+        nodo.insertarHijo(new Nodo(`${this.obtenerTipo(this.tipo1)}[]`))
+        nodo.insertarHijo(new Nodo(this.nombre))
+        if(this.valores) {
+            if(this.valores instanceof Nativas) {
+                if(this.valores.func === 'c_str') {
+                    nodo.insertarHijo(this.valores.ast())
+                }
+            } else {
+                const valores = new Nodo('VALORES')
+                for(const valor of this.valores) {
+                    valores.insertarHijo(valor.ast())
+                }
+                nodo.insertarHijo(valores)
+            }
+        } else {
+            const vector = new Nodo('VECTOR')
+            vector.insertarHijo(new Nodo(`${this.obtenerTipo(this.tipo2)}[]`))
+            vector.insertarHijo(this.longitudI.ast())
+            nodo.insertarHijo(vector)
+        }
+        return nodo
+    }
+
     obtenerVector = (longitudI) => {
         const valorDefault = this.obtenerValorDefault()
         var vector = new Array(this.longitudI)
@@ -73,6 +100,31 @@ class DeclaracionVec extends Instruccion {
             case Tipo.STRING:
                 return {valor: "", tipo: this.tipo1}
         }
+    }
+
+    obtenerTipo = (tipo) => {
+        if(tipo === Tipo.INT) {
+            return 'int'
+        }
+        if(tipo === Tipo.DOUBLE) {
+            return 'double'
+        }
+        if(tipo === Tipo.BOOL) {
+            return 'bool'
+        }
+        if(tipo === Tipo.CHAR) {
+            return 'char'
+        }
+        if(tipo === Tipo.STRING) {
+            return 'std::string'
+        }
+        if(tipo === Tipo.VECTOR) {
+            return 'Vector'
+        }
+        if(tipo === Tipo.MATRIZ) {
+            return 'Matrix'
+        }
+        return 'NULL'
     }
 }
 

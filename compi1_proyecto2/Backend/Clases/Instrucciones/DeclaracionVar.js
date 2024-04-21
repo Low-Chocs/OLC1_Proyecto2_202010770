@@ -45,6 +45,7 @@ class DeclaracionVar extends Instruccion {
 
     ast = () => {
         const nodo = new Nodo('DECLARACION')
+        nodo.insertarHijo(new Nodo(this.obtenerTipo(this.tipo)))
         const ids = new Nodo('IDENTIFICADORES')
         for(const identificador of this.identificadores) {
             ids.insertarHijo(new Nodo(identificador))
@@ -72,8 +73,11 @@ class DeclaracionVar extends Instruccion {
         if(tipo === Tipo.STRING) {
             return 'std::string'
         }
-        if(tipo === Tipo.ARRAY) {
-            return 'Array'
+        if(tipo === Tipo.VECTOR) {
+            return 'Vector'
+        }
+        if(tipo === Tipo.MATRIZ) {
+            return 'Matrix'
         }
         return 'NULL'
     }

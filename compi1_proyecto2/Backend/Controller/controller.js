@@ -1,5 +1,6 @@
 const { Entorno } = require('../Clases/Entorno/Entorno')
 const { Execute } = require('../Clases/Instrucciones/Execute')
+const { Nodo } = require('../Clases/AST/Nodo')
 const { errores, getConsole, reiniciarSalidas } = require('../Clases/Utilities/Salida')
 const { tablaSimbolos } = require('../Clases/Entorno/TablaSimbolos')
 const analizador = require("../Analizador/Parser.js");
@@ -9,12 +10,18 @@ class Controller {
         res.send('Interpreter is running!!!')
     }
 
+    escribirAST = (dot) => {
+        const fs = require('fs')
+        fs.writeFile('../../AST.dot', dot, (_) => {})
+    }
+
     interpretar = (instrucciones) => {
         try {
             tablaSimbolos.splice()
             reiniciarSalidas()
             const entornoGlobal = new Entorno(null, 'Global')
             var execute = null
+            var ast = new Nodo('INSTRUCCIONES')
             for(const instruccion of instrucciones) {
                 try {
                     if(instruccion instanceof Execute) {
@@ -22,15 +29,18 @@ class Controller {
                     } else {
                         instruccion.execute(entornoGlobal)
                     }
+                    ast.insertarHijo(instruccion.ast())
                 } catch(error) {}
             }
             if(execute) {
                 execute.execute(entornoGlobal)
             }
-            console.log(getConsole())
+            
+            this.escribirAST(ast.obtenerGrafo())
+            console.log(ast.obtenerGrafo())
             return {
                 consola: getConsole(),
-                ast: '',
+                ast: ast.obtenerGrafo(),
                 tablasimbolos: tablaSimbolos,
                 errores: errores,
             }
@@ -46,7 +56,7 @@ class Controller {
 
     test = (req, res) => {
         const { ruta } = req.body;
-        var fs = require('fs')
+        const fs = require('fs')
         fs.readFile(ruta, (err, data) => {
             if(err) {
                 res.json({message: "Error al analizar", salida: err})

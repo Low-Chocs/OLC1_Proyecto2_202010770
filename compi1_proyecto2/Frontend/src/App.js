@@ -3,13 +3,10 @@ import './App.css';
 import React, { useState } from 'react';
 let resultado = "";
 
-
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        
-        
       </header>
       {/* Renderiza el componente TextAreaWithButton */}
       <TextAreaWithButton />
@@ -38,11 +35,17 @@ function TextAreaWithButton() {
     console.log(resultado);
   };
 
+  const handleSendJson = () => {
+    const jsonData = {
+      ruta: "C:/Users/Luisi/Downloads/inter-main/inter-main/Inputs/Input2.sc"
+    };
+    console.log(jsonData); // Solo imprimo en consola por simplicidad
+  };
+
   return (
     <div className="container">
       <textarea
         className="textarea"
-
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Escribe o carga tu texto aquí por favor..."
@@ -55,11 +58,9 @@ function TextAreaWithButton() {
       />
       <input type="file" onChange={handleFileChange} />
       <button onClick={handlePrintText}>Imprimir en Consola</button>
-      
+      <button onClick={handleSendJson}>Enviar JSON</button>
     </div>
   );
 }
-
-
 
 export default App;
