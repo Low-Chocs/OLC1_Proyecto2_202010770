@@ -37,7 +37,6 @@ class Controller {
             }
             
             this.escribirAST(ast.obtenerGrafo())
-            console.log(ast.obtenerGrafo())
             return {
                 consola: getConsole(),
                 ast: ast.obtenerGrafo(),
@@ -59,7 +58,9 @@ class Controller {
         
         
         let resultado = analizador.parse(ruta.toString())
+        console.log(resultado)
         let interpretacion = this.interpretar(resultado)
+        //console.log(interpretacion);
         res.json({message: "Funcion analizar", salida: interpretacion})
         
     }
@@ -67,6 +68,7 @@ class Controller {
     parser = (req, res) => {
         const { entrada } = req.body;
         let resultado = analizador.parse(entrada);
+        console.log(resultado);
         let interpretacion = this.interpretar(resultado)
         res.json({message: "Funcion analizar", salida: interpretacion})
     }
